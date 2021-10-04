@@ -4,6 +4,10 @@ namespace Motion
 {
     public partial class FormMain : Form
     {
-        public FormMain() => InitializeComponent();
+        public FormMain()
+        {
+            InitializeComponent();
+            MotionController.GetDeviceCount(new byte[16]);
+        }
     }
 }

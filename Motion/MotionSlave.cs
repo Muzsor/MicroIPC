@@ -1,4 +1,6 @@
-﻿namespace Motion
+﻿using Motion.Enum;
+
+namespace Motion
 {
     public class MotionSlave
     {
@@ -18,9 +20,31 @@
 
         public AlStates AlState { get; private set; }
 
-        public uint SlaveType { get; private set; }
+        public SlaveType SlaveType { get; private set; }
 
         public string SlaveName { get; private set; }
+
+        private ushort[] subAxisNo;
+
+        /// <summary>
+        /// Axis 模塊在 EtherCAT 網絡中的位置，最多 64 軸。
+        /// </summary>
+        public ushort[] SubAxisNo
+        {
+            get => subAxisNo;
+            set => subAxisNo = value.Length > 64 ? (new ushort[EtherCatDef.MC_AXIS_NO_MAX]) : value;
+        }
+        
+        private AxisStates[] axisState;
+
+        /// <summary>
+        /// 各軸的狀態，最多 64 軸。
+        /// </summary>
+        public AxisStates[] AxisState
+        {
+            get => axisState;
+            set => axisState = value.Length > 64 ? new AxisStates[EtherCatDef.MC_AXIS_NO_MAX] : value;
+        }
 
         public MotionSlave(
             ushort deviceNo,
@@ -42,7 +66,7 @@
             RevisionNo = revisionNo;
             SerialNo = serialNo;
             AlState = (AlStates)alState;
-            SlaveType = slaveType;
+            SlaveType = (SlaveType)slaveType;
             SlaveName = slaveName;
         }
     }
