@@ -245,6 +245,20 @@ namespace Motion
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_McGetAxisPPU")]
         public static extern int ECAT_McGetAxisPPU(ushort DeviceNo, ushort AxisNo, ref double PPU);
 
+        /// <summary>
+        /// 設定指定軸號速度/加速度換算參數。
+        /// </summary>
+        /// <param name="DeviceNo">裝置編號。</param>
+        /// <param name="AxisNo">軸號。</param>
+        /// <param name="VelScal">速度換算參數，預設為 1 。</param>
+        /// <param name="AccScal">加速度換算參數，預設為 1 。</param>
+        /// <returns></returns>
+        [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_McSetAxisVelAccScale")]
+        public static extern int ECAT_McSetAxisVelAccScale(ushort DeviceNo, ushort AxisNo, double VelScal, double AccScal);
+
+        [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_McGetAxisVelAccScale")]
+        public static extern int ECAT_McGetAxisVelAccScale(ushort DeviceNo, ushort AxisNo, ref double VelScal, ref double AccScal);
+
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_McSetAxisEncoderPPR")]
         public static extern int ECAT_McSetAxisEncoderPPR(ushort DeviceNo, ushort AxisNo, uint PPR);
 
@@ -303,12 +317,41 @@ namespace Motion
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_McGetAxisHomeOffset")]
         public static extern int ECAT_McGetAxisHomeOffset(ushort DeviceNo, ushort AxisNo, ref double Offset);
 
+        /// <summary>
+        /// 設定指定軸號執行單軸運動時使用的加速度時間。
+        /// </summary>
+        /// <param name="DeviceNo">裝置編號。</param>
+        /// <param name="AxisNo">軸號。</param>
+        /// <param name="Time_ms">執行單軸運動時使用的加速度時間 (單位: 毫秒)</param>
+        /// <returns></returns>
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_McSetAxisAccTime")]
         public static extern int ECAT_McSetAxisAccTime(ushort DeviceNo, ushort AxisNo, ushort Time_ms);
 
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_McGetAxisAccTime")]
         public static extern int ECAT_McGetAxisAccTime(ushort DeviceNo, ushort AxisNo, ref ushort Time_ms);
 
+        /// <summary>
+        /// 設定指定軸號執行單軸運動時使用的加減速時間。時間愈短則加速度愈大。
+        /// </summary>
+        /// <param name="DeviceNo">裝置編號。</param>
+        /// <param name="AxisNo">軸號。</param>
+        /// <param name="AccTime_ms">執行單軸運動時使用的加速度時間 (單位: 毫秒)</param>
+        /// <param name="DecTime_ms">執行單軸運動時使用的減速度時間 (單位: 毫秒)</param>
+        /// <returns></returns>
+
+        [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_McSetAxisAccDecTime_Stepper")]
+        public static extern int ECAT_McSetAxisAccDecTime_Stepper(ushort DeviceNo, ushort AxisNo, ushort AccTime_ms, ushort DecTime_ms);
+
+        [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_McGetAxisAccDecTime_Stepper")]
+        public static extern int ECAT_McGetAxisAccDecTime_Stepper(ushort DeviceNo, ushort AxisNo, ref ushort AccTime_ms, ref ushort DecTime_ms);
+
+        /// <summary>
+        /// 設定指定軸號執行單軸運動時使用的加速度類型。
+        /// </summary>
+        /// <param name="DeviceNo">裝置編號。</param>
+        /// <param name="AxisNo">軸號。</param>
+        /// <param name="Type">執行單軸運動時使用的加速度類型。</param>
+        /// <returns></returns>
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_McSetAxisAccDecType")]
         public static extern int ECAT_McSetAxisAccDecType(ushort DeviceNo, ushort AxisNo, ushort Type);
 
@@ -849,6 +892,15 @@ namespace Motion
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_McClearMotionRecord")]
         public static extern int ECAT_McClearMotionRecord(ushort DeviceNo);
 
+        /// <summary>
+        /// 設定指定軸號之位置軟體極限。
+        /// </summary>
+        /// <param name="DeviceNo">裝置編號。</param>
+        /// <param name="AxisNo">軸號。</param>
+        /// <param name="Maximum">位置最大軟體極限(單位: user unit)</param>
+        /// <param name="Minimum">位置最小軟體極限(單位: user unit)</param>
+        /// <param name="AbortCode"></param>
+        /// <returns></returns>
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_McSetAxisPosSoftwareLimit")]
         public static extern int ECAT_McSetAxisPosSoftwareLimit(ushort DeviceNo, ushort AxisNo, double Maximum, double Minimum, ref uint AbortCode);
 

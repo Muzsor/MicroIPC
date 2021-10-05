@@ -24,6 +24,16 @@ namespace Motion
 
         public string SlaveName { get; private set; }
 
+        /// <summary>
+        /// 所有軸是否啟用。
+        /// </summary>
+        public bool IsEnabled { get; private set; }
+
+        /// <summary>
+        /// 所有軸是否初始化完成。
+        /// </summary>
+        public bool IsMcInitOk { get; internal set; }
+
         private ushort[] subAxisNo;
 
         /// <summary>
@@ -32,9 +42,9 @@ namespace Motion
         public ushort[] SubAxisNo
         {
             get => subAxisNo;
-            set => subAxisNo = value.Length > 64 ? (new ushort[EtherCatDef.MC_AXIS_NO_MAX]) : value;
+            private set => subAxisNo = value.Length > 64 ? (new ushort[EtherCatDef.MC_AXIS_NO_MAX]) : value;
         }
-        
+
         private AxisStates[] axisState;
 
         /// <summary>
@@ -43,7 +53,7 @@ namespace Motion
         public AxisStates[] AxisState
         {
             get => axisState;
-            set => axisState = value.Length > 64 ? new AxisStates[EtherCatDef.MC_AXIS_NO_MAX] : value;
+            private set => axisState = value.Length > 64 ? new AxisStates[EtherCatDef.MC_AXIS_NO_MAX] : value;
         }
 
         public MotionSlave(
@@ -68,6 +78,17 @@ namespace Motion
             AlState = (AlStates)alState;
             SlaveType = (SlaveType)slaveType;
             SlaveName = slaveName;
+        }
+
+        /// <summary>
+        /// 指定軸數。
+        /// </summary>
+        /// <param name="number"></param>
+        public void SetAxisNumber(int number)
+        {
+            SubAxisNo = new ushort[number];
+            AxisState = new AxisStates[number];
+            IsEnabled = true;
         }
     }
 }
