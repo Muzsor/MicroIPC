@@ -173,7 +173,10 @@ namespace Motion
             {
                 // 開啟指定裝置編號(卡號)來做通訊操作。
                 ret = EtherCatLib.ECAT_OpenDevice(DeviceNo);
-                SpinWait.SpinUntil(() => false, RetryInterval);
+                if (ret != 0)
+                {
+                    SpinWait.SpinUntil(() => false, RetryInterval);
+                }
             } while (ret != 0 && i++ < RetryCount);
             if (ret == 0)
             {
@@ -194,7 +197,10 @@ namespace Motion
             do
             {
                 ret = EtherCatLib.ECAT_GetDeviceState(DeviceNo, ref linkup, ref slaveResp, ref alstates, ref wc);
-                SpinWait.SpinUntil(() => false, RetryInterval);
+                if (ret != 0)
+                {
+                    SpinWait.SpinUntil(() => false, RetryInterval);
+                }
             } while (ret != 0 && i++ < RetryCount);
             if (ret == 0)
             {
@@ -302,18 +308,17 @@ namespace Motion
             return true;
         }
 
-        public bool GetAxisState(ref MotionSlave motionSlave, ref MotionAxis motionAxis, ref int resultCode)
+        private bool GetAxisState(ref MotionAxis motionAxis, ref int resultCode)
         {
-            if (!SlaveItems.Contains(motionSlave) || !motionSlave.AxisItems.Contains(motionAxis))
-            {
-                throw new KeyNotFoundException();
-            }
             uint axisState = 0;
             int i = 0;
             do
             {
-                resultCode = EtherCatLib.ECAT_McGetAxisState(motionSlave.DeviceNo, motionAxis.AxisNo, ref axisState);
-                SpinWait.SpinUntil(() => false, RetryInterval);
+                resultCode = EtherCatLib.ECAT_McGetAxisState(motionAxis.DeviceNo, motionAxis.AxisNo, ref axisState);
+                if (resultCode != 0)
+                {
+                    SpinWait.SpinUntil(() => false, RetryInterval);
+                }
             } while (resultCode != 0 && i++ < RetryCount);
             if (resultCode == 0)
             {
@@ -325,6 +330,87 @@ namespace Motion
                 Error(resultCode, MethodBase.GetCurrentMethod().Name);
                 return false;
             }
+        }
+
+        public bool GetAxisProcessState(ref MotionAxis motionAxis, ref int resultCode)
+        {
+            if (!GetAxisState(ref motionAxis, ref resultCode))
+            {
+                return false;
+            }
+            // 取得指定軸號命令位置。
+            double dValue = 0;
+            int i = 0;
+            do
+            {
+                resultCode = EtherCatLib.ECAT_McGetAxisCommandPos(motionAxis.DeviceNo, motionAxis.AxisNo, ref dValue);
+                if (resultCode != 0)
+                {
+                    SpinWait.SpinUntil(() => false, RetryInterval);
+                }
+            } while (resultCode != 0 && i++ < RetryCount);
+            motionAxis.CommandPos = dValue;
+            // 取得指定軸號當前位置。
+            dValue = 0;
+            i = 0;
+            do
+            {
+                resultCode = EtherCatLib.ECAT_McGetAxisActualPos(motionAxis.DeviceNo, motionAxis.AxisNo, ref dValue);
+                if (resultCode != 0)
+                {
+                    SpinWait.SpinUntil(() => false, RetryInterval);
+                }
+            } while (resultCode != 0 && i++ < RetryCount);
+            motionAxis.ActualPos = dValue;
+            // 取得指定軸號當前速度。
+            dValue = 0;
+            i = 0;
+            do
+            {
+                resultCode = EtherCatLib.ECAT_McGetAxisActualVel(motionAxis.DeviceNo, motionAxis.AxisNo, ref dValue);
+                if (resultCode != 0)
+                {
+                    SpinWait.SpinUntil(() => false, RetryInterval);
+                }
+            } while (resultCode != 0 && i++ < RetryCount);
+            motionAxis.ActualVel = dValue;
+            // 取得指定軸號最後出錯代碼。
+            int lastError = 0;
+            i = 0;
+            do
+            {
+                resultCode = EtherCatLib.ECAT_McGetAxisLastError(motionAxis.DeviceNo, motionAxis.AxisNo, ref lastError);
+                if (resultCode != 0)
+                {
+                    SpinWait.SpinUntil(() => false, RetryInterval);
+                }
+            } while (resultCode != 0 && i++ < RetryCount);
+            motionAxis.LastError = lastError;
+            // 取得指定軸號驅動器出錯代碼。
+            ushort driveError = 0;
+            i = 0;
+            do
+            {
+                resultCode = EtherCatLib.ECAT_McGetAxisDriveError(motionAxis.DeviceNo, motionAxis.AxisNo, ref driveError);
+                if (resultCode != 0)
+                {
+                    SpinWait.SpinUntil(() => false, RetryInterval);
+                }
+            } while (resultCode != 0 && i++ < RetryCount);
+            motionAxis.DriveError = driveError;
+            // 取得指定軸號驅動器出錯代碼。
+            uint axisDI = 0;
+            i = 0;
+            do
+            {
+                resultCode = EtherCatLib.ECAT_McGetAxisDI(motionAxis.DeviceNo, motionAxis.AxisNo, ref axisDI);
+                if (resultCode != 0)
+                {
+                    SpinWait.SpinUntil(() => false, RetryInterval);
+                }
+            } while (resultCode != 0 && i++ < RetryCount);
+            motionAxis.AxisDI = axisDI;
+            return true;
         }
 
         public bool InitMotion()
@@ -346,7 +432,7 @@ namespace Motion
                     int retryCount = 0; // 重試次數
                     do
                     {
-                        if (GetAxisState(ref slave, ref axis, ref resultCode))
+                        if (GetAxisState(ref axis, ref resultCode))
                         {
                             if (resultCode == EtherCatError.ECAT_ERR_MC_NOT_INITIALIZED) // 軸尚未初始化。
                             {
@@ -588,6 +674,21 @@ namespace Motion
             motionParamResult.PosSoftwareMaxLimit = posSoftwareMaxLimit;
             motionParam.PosSoftwareMinLimit = posSoftwareMinLimit;
             return (motionParamResult, true);
+        }
+
+        public bool ServoControl(MotionAxis motionAxis, bool isOn)
+        {
+            int ret = 0;
+            int i = 0;
+            do
+            {
+                ret = EtherCatLib.ECAT_McSetAxisServoOn(motionAxis.DeviceNo, motionAxis.AxisNo, (ushort)(isOn ? 1 : 0));
+                if (ret != 0)
+                {
+                    SpinWait.SpinUntil(() => false, RetryInterval);
+                }
+            } while (ret != 0 && i++ < RetryCount);
+            return ret == 0;
         }
     }
 }

@@ -58,12 +58,12 @@ namespace Motion
             this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.uiTitlePanel4 = new Sunny.UI.UITitlePanel();
+            this.uiButton4 = new Sunny.UI.UIButton();
             this.uiButton3 = new Sunny.UI.UIButton();
             this.uiButton2 = new Sunny.UI.UIButton();
             this.uiButton1 = new Sunny.UI.UIButton();
             this.ServoOff = new Sunny.UI.UIButton();
             this.ServoOnButton = new Sunny.UI.UIButton();
-            this.uiButton4 = new Sunny.UI.UIButton();
             this.Timer1 = new System.Windows.Forms.Timer(this.components);
             this.uiTableLayoutPanel1.SuspendLayout();
             this.uiTitlePanel1.SuspendLayout();
@@ -407,25 +407,25 @@ namespace Motion
             this.uiTitlePanel4.Text = "ControlPanel";
             this.uiTitlePanel4.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // uiButton4
+            // 
+            this.uiButton4.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiButton4.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.uiButton4.Location = new System.Drawing.Point(169, 228);
+            this.uiButton4.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiButton4.Name = "uiButton4";
+            this.uiButton4.Size = new System.Drawing.Size(120, 50);
+            this.uiButton4.TabIndex = 23;
+            this.uiButton4.Text = "QuickStop";
+            // 
             // uiButton3
             // 
             this.uiButton3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiButton3.FillColor = System.Drawing.Color.Red;
-            this.uiButton3.FillHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            this.uiButton3.FillPressColor = System.Drawing.Color.Maroon;
-            this.uiButton3.FillSelectedColor = System.Drawing.Color.Maroon;
             this.uiButton3.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.uiButton3.ForeHoverColor = System.Drawing.Color.Black;
-            this.uiButton3.ForeSelectedColor = System.Drawing.Color.Black;
             this.uiButton3.Location = new System.Drawing.Point(43, 228);
             this.uiButton3.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiButton3.Name = "uiButton3";
-            this.uiButton3.RectColor = System.Drawing.Color.Black;
-            this.uiButton3.RectHoverColor = System.Drawing.Color.White;
-            this.uiButton3.RectPressColor = System.Drawing.Color.Black;
-            this.uiButton3.RectSelectedColor = System.Drawing.Color.Black;
             this.uiButton3.Size = new System.Drawing.Size(120, 50);
-            this.uiButton3.Style = Sunny.UI.UIStyle.Custom;
             this.uiButton3.TabIndex = 18;
             this.uiButton3.Text = "Stop";
             // 
@@ -454,69 +454,26 @@ namespace Motion
             // ServoOff
             // 
             this.ServoOff.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ServoOff.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.ServoOff.FillHoverColor = System.Drawing.Color.Red;
-            this.ServoOff.FillPressColor = System.Drawing.Color.Maroon;
-            this.ServoOff.FillSelectedColor = System.Drawing.Color.Red;
             this.ServoOff.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.ServoOff.ForeHoverColor = System.Drawing.Color.Black;
-            this.ServoOff.ForeSelectedColor = System.Drawing.Color.Black;
             this.ServoOff.Location = new System.Drawing.Point(149, 40);
             this.ServoOff.MinimumSize = new System.Drawing.Size(1, 1);
             this.ServoOff.Name = "ServoOff";
-            this.ServoOff.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.ServoOff.RectHoverColor = System.Drawing.Color.White;
-            this.ServoOff.RectPressColor = System.Drawing.Color.Black;
-            this.ServoOff.RectSelectedColor = System.Drawing.Color.Black;
             this.ServoOff.Size = new System.Drawing.Size(140, 80);
-            this.ServoOff.Style = Sunny.UI.UIStyle.Custom;
             this.ServoOff.TabIndex = 21;
             this.ServoOff.Text = "Servo Off";
+            this.ServoOff.Click += new System.EventHandler(this.ServoOff_Click);
             // 
             // ServoOnButton
             // 
             this.ServoOnButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ServoOnButton.FillColor = System.Drawing.Color.Green;
-            this.ServoOnButton.FillHoverColor = System.Drawing.Color.LimeGreen;
-            this.ServoOnButton.FillPressColor = System.Drawing.Color.DarkOliveGreen;
-            this.ServoOnButton.FillSelectedColor = System.Drawing.Color.LimeGreen;
             this.ServoOnButton.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.ServoOnButton.ForeHoverColor = System.Drawing.Color.Black;
-            this.ServoOnButton.ForeSelectedColor = System.Drawing.Color.Black;
             this.ServoOnButton.Location = new System.Drawing.Point(3, 40);
             this.ServoOnButton.MinimumSize = new System.Drawing.Size(1, 1);
             this.ServoOnButton.Name = "ServoOnButton";
-            this.ServoOnButton.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.ServoOnButton.RectHoverColor = System.Drawing.Color.White;
-            this.ServoOnButton.RectPressColor = System.Drawing.Color.Black;
-            this.ServoOnButton.RectSelectedColor = System.Drawing.Color.Black;
             this.ServoOnButton.Size = new System.Drawing.Size(140, 80);
-            this.ServoOnButton.Style = Sunny.UI.UIStyle.Custom;
             this.ServoOnButton.TabIndex = 22;
             this.ServoOnButton.Text = "Servo On";
             this.ServoOnButton.Click += new System.EventHandler(this.ServoOnButton_Click);
-            // 
-            // uiButton4
-            // 
-            this.uiButton4.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiButton4.FillColor = System.Drawing.Color.Red;
-            this.uiButton4.FillHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            this.uiButton4.FillPressColor = System.Drawing.Color.Maroon;
-            this.uiButton4.FillSelectedColor = System.Drawing.Color.Maroon;
-            this.uiButton4.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.uiButton4.ForeHoverColor = System.Drawing.Color.Black;
-            this.uiButton4.ForeSelectedColor = System.Drawing.Color.Black;
-            this.uiButton4.Location = new System.Drawing.Point(169, 228);
-            this.uiButton4.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiButton4.Name = "uiButton4";
-            this.uiButton4.RectColor = System.Drawing.Color.Black;
-            this.uiButton4.RectHoverColor = System.Drawing.Color.White;
-            this.uiButton4.RectPressColor = System.Drawing.Color.Black;
-            this.uiButton4.RectSelectedColor = System.Drawing.Color.Black;
-            this.uiButton4.Size = new System.Drawing.Size(120, 50);
-            this.uiButton4.Style = Sunny.UI.UIStyle.Custom;
-            this.uiButton4.TabIndex = 23;
-            this.uiButton4.Text = "QuickStop";
             // 
             // FormMain
             // 

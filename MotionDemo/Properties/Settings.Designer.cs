@@ -25,7 +25,7 @@ namespace MotionDemo.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("MBDLN25BE")]
         public string Card1Slave1Name {
             get {
                 return ((string)(this["Card1Slave1Name"]));
@@ -34,7 +34,7 @@ namespace MotionDemo.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0,1,2,3,4,5,6")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public string Card1Slave1 {
             get {
                 return ((string)(this["Card1Slave1"]));

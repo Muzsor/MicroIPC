@@ -67,24 +67,11 @@ namespace Motion
         /// 指定軸數。
         /// </summary>
         /// <param name="count"></param>
-        public void SetAxisCount(int count)
+        internal void SetAxisCount(int count)
         {
             if (AxisItems == null)
             {
                 AxisItems = new MotionAxis[count];
-            }
-        }
-
-        /// <summary>
-        /// 加入軸。
-        /// </summary>
-        /// <param name="position"></param>
-        /// <param name="motionAxis"></param>
-        public void AddAxis(ushort position, MotionAxis motionAxis)
-        {
-            if (AxisItems != null && position < AxisItems.Length) 
-            {
-                AxisItems[position] = motionAxis;
             }
         }
     }
