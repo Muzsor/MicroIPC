@@ -34,12 +34,10 @@ namespace MotionDemo.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>0</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection Card1Slave1 {
+        [global::System.Configuration.DefaultSettingValueAttribute("0,1,2,3,4,5,6")]
+        public string Card1Slave1 {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["Card1Slave1"]));
+                return ((string)(this["Card1Slave1"]));
             }
         }
     }

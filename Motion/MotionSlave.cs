@@ -25,35 +25,18 @@ namespace Motion
         public string SlaveName { get; private set; }
 
         /// <summary>
-        /// 所有軸是否啟用。
-        /// </summary>
-        public bool IsEnabled { get; private set; }
-
-        /// <summary>
         /// 所有軸是否初始化完成。
         /// </summary>
         public bool IsMcInitOk { get; internal set; }
 
-        private ushort[] subAxisNo;
-
+        private MotionAxis[] axisItems;
         /// <summary>
         /// Axis 模塊在 EtherCAT 網絡中的位置，最多 64 軸。
         /// </summary>
-        public ushort[] SubAxisNo
+        public MotionAxis[] AxisItems
         {
-            get => subAxisNo;
-            private set => subAxisNo = value.Length > 64 ? (new ushort[EtherCatDef.MC_AXIS_NO_MAX]) : value;
-        }
-
-        private AxisStates[] axisState;
-
-        /// <summary>
-        /// 各軸的狀態，最多 64 軸。
-        /// </summary>
-        public AxisStates[] AxisState
-        {
-            get => axisState;
-            private set => axisState = value.Length > 64 ? new AxisStates[EtherCatDef.MC_AXIS_NO_MAX] : value;
+            get => axisItems;
+            private set => axisItems = value.Length > 64 ? new MotionAxis[EtherCatDef.MC_AXIS_NO_MAX] : value;
         }
 
         public MotionSlave(
@@ -83,12 +66,26 @@ namespace Motion
         /// <summary>
         /// 指定軸數。
         /// </summary>
-        /// <param name="number"></param>
-        public void SetAxisNumber(int number)
+        /// <param name="count"></param>
+        public void SetAxisCount(int count)
         {
-            SubAxisNo = new ushort[number];
-            AxisState = new AxisStates[number];
-            IsEnabled = true;
+            if (AxisItems == null)
+            {
+                AxisItems = new MotionAxis[count];
+            }
+        }
+
+        /// <summary>
+        /// 加入軸。
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="motionAxis"></param>
+        public void AddAxis(ushort position, MotionAxis motionAxis)
+        {
+            if (AxisItems != null && position < AxisItems.Length) 
+            {
+                AxisItems[position] = motionAxis;
+            }
         }
     }
 }

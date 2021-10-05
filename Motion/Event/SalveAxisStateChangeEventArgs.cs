@@ -8,7 +8,7 @@
 
         public string SlaveName { get; set; }
 
-        public ushort SubAxisNo { get; set; }
+        public ushort AxisNo { get; set; }
 
         public AxisStates AxisState { get; set; }
     }

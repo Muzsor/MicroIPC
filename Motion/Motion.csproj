@@ -57,6 +57,7 @@
     <Compile Include="EtherCAT\EtherCatDef.cs" />
     <Compile Include="EtherCAT\EtherCatError.cs" />
     <Compile Include="EtherCAT\EtherCatLib.cs" />
+    <Compile Include="MotionAxis.cs" />
     <Compile Include="MotionController.cs" />
     <Compile Include="MotionParam.cs" />
     <Compile Include="MotionSlave.cs" />
