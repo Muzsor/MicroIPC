@@ -35,9 +35,9 @@ namespace MotionDemo.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public string Card1Slave1 {
+        public string Card1Slave1AxisList {
             get {
-                return ((string)(this["Card1Slave1"]));
+                return ((string)(this["Card1Slave1AxisList"]));
             }
         }
     }

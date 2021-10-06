@@ -5,6 +5,12 @@ namespace Motion
 {
     internal class EtherCatLib
     {
+        /// <summary>
+        /// 取得當前使用的 dll 版本資訊。
+        /// </summary>
+        /// <param name="Version">當前使用的 dll 版本資訊。</param>
+        /// <param name="Size">回傳的 Version 大小(Byte)。</param>
+        /// <returns></returns>
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_GetDllVersion")]
         public static extern int ECAT_GetDllVersion(StringBuilder Version, ref ushort Size);
 
