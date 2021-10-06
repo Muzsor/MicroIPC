@@ -66,10 +66,10 @@
     <Compile Include="Utils\Logger.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="dll\ECAT8K.dll">
+    <Content Include="ECAT8K.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="dll\libecatdevice.dll">
+    <Content Include="libecatdevice.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

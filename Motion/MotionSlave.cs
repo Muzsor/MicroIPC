@@ -88,26 +88,10 @@ namespace Motion
 
         public MotionSlave(
             ushort deviceNo,
-            ushort slaveNo,
-            ushort alias,
-            uint productCode,
-            uint vendorID,
-            uint revisionNo,
-            uint serialNo,
-            byte alState,
-            uint slaveType,
-            string slaveName)
+            ushort slaveNo)
         {
             DeviceNo = deviceNo;
             SlaveNo = slaveNo;
-            Alias = alias;
-            ProductCode = productCode;
-            VendorID = vendorID;
-            RevisionNo = revisionNo;
-            SerialNo = serialNo;
-            AlState = (AlStates)alState;
-            SlaveType = (SlaveType)slaveType;
-            SlaveName = slaveName;
             IsMcInitOk = false;
         }
 

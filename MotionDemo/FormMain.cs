@@ -49,10 +49,10 @@ namespace Motion
                         ushort[] axisList = Settings.Default.Card1Slave1AxisList.Split(',').Select(s => (ushort)int.Parse(s)).ToArray();
                         if (slave.SetAxisNo(axisList, ref resultCode))
                         {
-                            var listItem = new ListViewItem(slave.SlaveNo.ToString());
-                            listItem.SubItems.Add(slave.SlaveName.ToString());
-                            listItem.SubItems.Add(slave.AlState.ToString());
-                            listItem.SubItems.Add(slave.IsMcInitOk.ToString());
+                            var listItem = new ListViewItem(slave.SlaveNo.ToString());  // 0
+                            listItem.SubItems.Add(slave.SlaveName.ToString()); // 1
+                            listItem.SubItems.Add(slave.AlState.ToString()); // 2
+                            listItem.SubItems.Add(slave.IsMcInitOk.ToString()); // 3 
                             SlaveStateListView.Items.Add(listItem);
                             SlaveStateListView.Items[0].SubItems[2].Text = slave.AlState.ToString();
                         }
@@ -93,8 +93,14 @@ namespace Motion
             MainMotionController.GetDeviceState(ref resultCode);
             for (int i = 0; i < MainMotionController.SlaveItems.Length; i++)
             {
+                MotionSlave slave = MainMotionController.SlaveItems[i];
+                if (slave.GetSlaveInfo(ref resultCode) && SlaveStateListView.Items.ContainsKey(slave.SerialNo.ToString()))
+                {
+                    SlaveStateListView.Items[0].SubItems[2].Text = slave.AlState.ToString();
+                    SlaveStateListView.Items[0].SubItems[3].Text = slave.IsMcInitOk.ToString();
+                }
                 MotionAxis axis = MainMotionController.SlaveItems[i].AxisItems[0];
-                if (axis.GetAxisProcessState(ref resultCode) && AxisListView.Items.ContainsKey(i.ToString()))
+                if (axis.GetAxisProcessState(ref resultCode) && AxisListView.Items.ContainsKey(axis.AxisNo.ToString()))
                 {
                     AxisListView.Items[0].SubItems[1].Text = axis.AxisState.ToString();
                     AxisListView.Items[0].SubItems[2].Text = axis.LastError.ToString();

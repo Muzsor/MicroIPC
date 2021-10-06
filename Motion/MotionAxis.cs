@@ -54,7 +54,7 @@ namespace Motion
         {
             int i;
             var motionParamResult = new MotionParam();
-            if (IsMcInitOk)
+            if (!IsMcInitOk)
             {
                 return (motionParamResult, false);
             }

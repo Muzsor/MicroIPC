@@ -262,12 +262,17 @@ namespace Motion
                     return false;
                 }
                 SlaveItems = new MotionSlave[SlavesResp];
-                for (int i = 0; i < SlaveItems.Length; i++)
+                for (ushort i = 0; i < SlaveItems.Length; i++)
                 {
+                    SlaveItems[i] = new MotionSlave(DeviceNo, i);
                     SlaveItems[i].GetSlaveInfo(ref resultCode);
                 }
+                if (SlaveItems.Length > 0)
+                {
+                    return true;
+                }
             }
-            return true;
+            return false;
         }
 
         /// <summary>
@@ -293,47 +298,45 @@ namespace Motion
                     int retryCount = 0; // 重試次數
                     do
                     {
-                        if (axis.GetAxisState(ref resultCode))
+                        axis.GetAxisState(ref resultCode);
+                        if (resultCode == EtherCatError.ECAT_ERR_MC_NOT_INITIALIZED) // 軸尚未初始化。
                         {
-                            if (resultCode == EtherCatError.ECAT_ERR_MC_NOT_INITIALIZED) // 軸尚未初始化。
+                            axis.IsMcInitOk = false;
+                            mcSlaveNo.Add(slave.SlaveNo);
+                            mcSubAxisNo.Add(axis.AxisNo);
+                            break;
+                        }
+                        else if (axis.AxisState == AxisStates.MC_AS_DISABLED) // 軸已初始化，Servo尚未啟動。
+                        {
+                            axis.IsMcInitOk = true;
+                            break;
+                        }
+                        else if (axis.AxisState == AxisStates.MC_AS_STANDSTILL) // 軸已初始化，Servo啟動，停止中。
+                        {
+                            axis.IsMcInitOk = true;
+                            // Servo尚未停止，執行 ServoOff。
+                            axis.ServoControl(false, ref resultCode);
+                        }
+                        else if (axis.AxisState == AxisStates.MC_AS_ERRORSTOP) // 軸出現異常。
+                        {
+                            axis.IsMcInitOk = true;
+                            axis.GetAxisErrorState(ref resultCode);
+                            SalveAxisStateChangeEvent?.Invoke(slave, new SalveAxisStateChangeEventArgs()
                             {
-                                axis.IsMcInitOk = false;
-                                mcSlaveNo.Add(slave.SlaveNo);
-                                mcSubAxisNo.Add(axis.AxisNo);
-                                break;
-                            }
-                            else if (axis.AxisState == AxisStates.MC_AS_DISABLED) // 軸已初始化，Servo尚未啟動。
-                            {
-                                axis.IsMcInitOk = true;
-                                break;
-                            }
-                            else if (axis.AxisState == AxisStates.MC_AS_STANDSTILL) // 軸已初始化，Servo啟動，停止中。
-                            {
-                                axis.IsMcInitOk = true;
-                                // Servo尚未停止，執行 ServoOff。
-                                axis.ServoControl(false, ref resultCode);
-                            }
-                            else if (axis.AxisState == AxisStates.MC_AS_ERRORSTOP) // 軸出現異常。
-                            {
-                                axis.IsMcInitOk = true;
-                                axis.GetAxisErrorState(ref resultCode);
-                                SalveAxisStateChangeEvent?.Invoke(slave, new SalveAxisStateChangeEventArgs()
-                                {
-                                    SlaveNo = slave.SlaveNo,
-                                    AlState = slave.AlState,
-                                    SlaveName = slave.SlaveName,
-                                    AxisNo = axis.AxisNo,
-                                    AxisState = axis.AxisState
-                                });
-                                Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"SlaveNo=[{slave.SlaveNo}], AxisNo=[{axis.AxisNo}] MC_AS_ERRORSTOP !!!");
-                                break;
-                            }
-                            else if (axis.AxisState != AxisStates.MC_AS_STOPPING) // 軸仍在運動中。
-                            {
-                                axis.IsMcInitOk = true;
-                                // 如果不在停止狀態，立刻停止。
-                                axis.AxisQuickStop(ref resultCode);
-                            }
+                                SlaveNo = slave.SlaveNo,
+                                AlState = slave.AlState,
+                                SlaveName = slave.SlaveName,
+                                AxisNo = axis.AxisNo,
+                                AxisState = axis.AxisState
+                            });
+                            Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"SlaveNo=[{slave.SlaveNo}], AxisNo=[{axis.AxisNo}] MC_AS_ERRORSTOP !!!");
+                            break;
+                        }
+                        else if (axis.AxisState != AxisStates.MC_AS_STOPPING) // 軸仍在運動中。
+                        {
+                            axis.IsMcInitOk = true;
+                            // 如果不在停止狀態，立刻停止。
+                            axis.AxisQuickStop(ref resultCode);
                         }
                         SpinWait.SpinUntil(() => false, RetryInterval);
                     }
@@ -371,6 +374,14 @@ namespace Motion
                             axis.IsMcInitOk = false;
                         }
                         Logger.Error(ret, "ECAT_McInit", $"SlaveNo=[{slave.SlaveNo}] Error !!!");
+                    }
+                }
+                else
+                {
+                    slave.IsMcInitOk = true;
+                    foreach (MotionAxis axis in slave.AxisItems)
+                    {
+                        axis.IsMcInitOk = true;
                     }
                 }
             }
