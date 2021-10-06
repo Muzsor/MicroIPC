@@ -23,10 +23,7 @@ namespace Motion
             {
                 MainMotionController = new MotionController(0); // CardId
                 MainMotionController.DeviceStateChangeEvent += MainMotionController_DeviceStateChangeEvent;
-                if (MainMotionController.OpenDevice(ref resultCode))
-                {
-                    InitializeMotion();
-                }
+                InitializeMotion();
             }
         }
 
@@ -41,25 +38,27 @@ namespace Motion
         private void InitializeMotion()
         {
             int resultCode = 0;
-            if (MainMotionController.StartOpTask(ref resultCode) && MainMotionController.GetSlaveInfo(ref resultCode))
+            if (MainMotionController.InitializeSlave(ref resultCode))
             {
                 for (int i = 0; i < MainMotionController.SlaveItems.Length; i++)
                 {
                     MotionSlave slave = MainMotionController.SlaveItems[i];
+                    // Card 1
                     if (slave.SlaveName == Settings.Default.Card1Slave1Name)
                     {
                         ushort[] axisList = Settings.Default.Card1Slave1AxisList.Split(',').Select(s => (ushort)int.Parse(s)).ToArray();
-                        slave.SetAxisNo(axisList, ref resultCode);
-                        // 
-                        var listItem = new ListViewItem(slave.SlaveNo.ToString());
-                        listItem.SubItems.Add(slave.SlaveName.ToString());
-                        listItem.SubItems.Add(slave.AlState.ToString());
-                        listItem.SubItems.Add(slave.IsMcInitOk.ToString());
-                        SlaveStateListView.Items.Add(listItem);
-                        SlaveStateListView.Items[0].SubItems[2].Text = slave.AlState.ToString();
+                        if (slave.SetAxisNo(axisList, ref resultCode))
+                        {
+                            var listItem = new ListViewItem(slave.SlaveNo.ToString());
+                            listItem.SubItems.Add(slave.SlaveName.ToString());
+                            listItem.SubItems.Add(slave.AlState.ToString());
+                            listItem.SubItems.Add(slave.IsMcInitOk.ToString());
+                            SlaveStateListView.Items.Add(listItem);
+                            SlaveStateListView.Items[0].SubItems[2].Text = slave.AlState.ToString();
+                        }
                     }
                 }
-                if (MainMotionController.InitMotion())
+                if (MainMotionController.InitMotionAxis())
                 {
                     for (int i = 0; i < MainMotionController.SlaveItems.Length; i++)
                     {
@@ -67,16 +66,18 @@ namespace Motion
                         var motionConfig = (MotionParam)ConfigurationManager.GetSection(nameof(MotionParam));
                         foreach (MotionAxis axis in MainMotionController.SlaveItems[i].AxisItems)
                         {
-                            MainMotionController.SetAxisParam(ref slave, axis.AxisNo, motionConfig);
-                            //
-                            var listItem = new ListViewItem(axis.AxisNo.ToString()); // Axis No
-                            listItem.SubItems.Add(axis.AxisState.ToString()); // Axis State
-                            listItem.SubItems.Add(string.Empty); // Axis Error
-                            listItem.SubItems.Add(string.Empty); // Drive Error
-                            listItem.SubItems.Add(string.Empty); // CmdPosition
-                            listItem.SubItems.Add(string.Empty); // Position
-                            listItem.SubItems.Add(string.Empty); // Velocity
-                            AxisListView.Items.Add(listItem);
+                            (_, bool result) = axis.SetAxisParam(motionConfig, ref resultCode);
+                            if (result)
+                            {
+                                var listItem = new ListViewItem(axis.AxisNo.ToString()); // Axis No
+                                listItem.SubItems.Add(axis.AxisState.ToString()); // Axis State
+                                listItem.SubItems.Add(string.Empty); // Axis Error
+                                listItem.SubItems.Add(string.Empty); // Drive Error
+                                listItem.SubItems.Add(string.Empty); // CmdPosition
+                                listItem.SubItems.Add(string.Empty); // Position
+                                listItem.SubItems.Add(string.Empty); // Velocity
+                                AxisListView.Items.Add(listItem);
+                            }
                         }
                         SlaveStateListView.Items[0].SubItems[2].Text = MainMotionController.SlaveItems[i].AlState.ToString();
                     }
@@ -89,7 +90,7 @@ namespace Motion
         private void Timer1_Tick(object sender, EventArgs e)
         {
             int resultCode = 0;
-            MainMotionController.GetDeviceState(ref resultCode);            
+            MainMotionController.GetDeviceState(ref resultCode);
             for (int i = 0; i < MainMotionController.SlaveItems.Length; i++)
             {
                 MotionAxis axis = MainMotionController.SlaveItems[i].AxisItems[0];
@@ -106,9 +107,15 @@ namespace Motion
         }
 
         private void ServoOnButton_Click(object sender, System.EventArgs e)
-            => MainMotionController.ServoControl(MainMotionController.SlaveItems[0].AxisItems[0], true);
+        {
+            int resultCode = 0;
+            MainMotionController.SlaveItems[0].AxisItems[0].ServoControl(true, ref resultCode);
+        }
 
         private void ServoOff_Click(object sender, EventArgs e)
-            => MainMotionController.ServoControl(MainMotionController.SlaveItems[0].AxisItems[0], false);
+        {
+            int resultCode = 0;
+            MainMotionController.SlaveItems[0].AxisItems[0].ServoControl(false, ref resultCode);
+        }
     }
 }

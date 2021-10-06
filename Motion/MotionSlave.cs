@@ -1,6 +1,5 @@
 ﻿using Motion.Enum;
 
-using System.Reflection;
 using System.Text;
 using System.Threading;
 
@@ -83,7 +82,8 @@ namespace Motion
         public MotionAxis[] AxisItems
         {
             get => axisItems;
-            private set => axisItems = value.Length > 64 ? new MotionAxis[EtherCatDef.MC_AXIS_NO_MAX] : value;
+            private set => axisItems = value.Length > EtherCatDef.MC_AXIS_NO_MAX ?
+                new MotionAxis[EtherCatDef.MC_AXIS_NO_MAX] : value;
         }
 
         public MotionSlave(
@@ -108,6 +108,7 @@ namespace Motion
             AlState = (AlStates)alState;
             SlaveType = (SlaveType)slaveType;
             SlaveName = slaveName;
+            IsMcInitOk = false;
         }
 
         /// <summary>
@@ -134,7 +135,7 @@ namespace Motion
                     ref alState,
                     ref slaveType,
                     slvName);
-                if (resultCode !=0)
+                if (resultCode != 0)
                 {
                     SpinWait.SpinUntil(() => false, MotionController.RetryInterval);
                 }
@@ -149,7 +150,7 @@ namespace Motion
             else
             {
                 return false;
-            }            
+            }
         }
 
         /// <summary>

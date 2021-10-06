@@ -1,8 +1,6 @@
-﻿using NLog;
-
+﻿
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -56,7 +54,12 @@ namespace Motion
         /// <summary>
         /// 所有從站模組。
         /// </summary>
-        public MotionSlave[] SlaveItems { get => slavesItems; private set => slavesItems = value; }
+        public MotionSlave[] SlaveItems
+        {
+            get => slavesItems;
+            private set => slavesItems = value.Length > EtherCatDef.NETWORK_SLAVE_MAX ?
+                slavesItems = new MotionSlave[EtherCatDef.NETWORK_SLAVE_MAX] : slavesItems = value;
+        }
 
         #region Event
 
@@ -110,7 +113,7 @@ namespace Motion
                 if (resultCode != 0)
                 {
                     SpinWait.SpinUntil(() => false, 200);
-                }                
+                }
             } while (resultCode != 0 && i++ < 10);
             if (resultCode == 0)
             {
@@ -245,69 +248,39 @@ namespace Motion
         }
 
         /// <summary>
-        /// 取得從站模組相關資訊。
+        /// 裝置、從站初始化。
         /// </summary>
         /// <param name="resultCode"></param>
         /// <returns></returns>
-        public bool GetSlaveInfo(ref int resultCode)
+        public bool InitializeSlave(ref int resultCode)
         {
-            if (AlState != AlStates.ECAT_AS_OP)
+            if (OpenDevice(ref resultCode) && StartOpTask(ref resultCode))
             {
-                Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, "裝置不在Operational狀態，無法取得從站資訊。");
-                return false;
-            }
-            SlaveItems = new MotionSlave[SlavesResp];
-            ushort alias = 0;
-            uint productCode = 0, vendorID = 0, revisionNo = 0, serialNo = 0, slaveType = 0;
-            byte alState = 0;
-            var slvName = new StringBuilder(string.Empty, EtherCatDef.MAX_SLAVE_NAME_LENGTH);
-            int i;
-            for (ushort slaveNo = 0; slaveNo < SlavesResp; slaveNo++)
-            {
-                i = 0;
-                do
+                if (AlState != AlStates.ECAT_AS_OP)
                 {
-                    resultCode = EtherCatLib.ECAT_GetSlaveInfo(
-                        DeviceNo,
-                        slaveNo,
-                        ref alias,
-                        ref productCode,
-                        ref vendorID,
-                        ref revisionNo,
-                        ref serialNo,
-                        ref alState,
-                        ref slaveType,
-                        slvName);
-                } while (resultCode != 0 && i++ < RetryCount);
-                if (resultCode == 0)
-                {
-                    SlaveItems[slaveNo] = new MotionSlave(
-                        DeviceNo,
-                        slaveNo,
-                        alias,
-                        productCode,
-                        vendorID,
-                        revisionNo,
-                        serialNo,
-                        alState,
-                        slaveType,
-                        slvName.ToString());
+                    Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, "裝置不在Operational狀態，無法取得從站資訊。");
+                    return false;
                 }
-                else
+                SlaveItems = new MotionSlave[SlavesResp];
+                for (int i = 0; i < SlaveItems.Length; i++)
                 {
-                    Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name);
+                    SlaveItems[i].GetSlaveInfo(ref resultCode);
                 }
             }
             return true;
         }
 
-        public bool InitMotion()
+        /// <summary>
+        /// 從站之子軸初始化。
+        /// </summary>
+        /// <returns></returns>
+        public bool InitMotionAxis()
         {
-            for (int i = 0; i < slavesItems.Length; i++)
+            for (int i = 0; i < SlaveItems.Length; i++)
             {
                 var mcSlaveNo = new List<ushort>();
                 var mcSubAxisNo = new List<ushort>();
-                MotionSlave slave = slavesItems[i];
+                MotionSlave slave = SlaveItems[i];
                 if (slave.AxisItems == null)
                 {
                     continue;
@@ -336,13 +309,14 @@ namespace Motion
                             }
                             else if (axis.AxisState == AxisStates.MC_AS_STANDSTILL) // 軸已初始化，Servo啟動，停止中。
                             {
+                                axis.IsMcInitOk = true;
                                 // Servo尚未停止，執行 ServoOff。
-                                EtherCatLib.ECAT_McSetAxisServoOn(slave.DeviceNo, axis.AxisNo, 0);
+                                axis.ServoControl(false, ref resultCode);
                             }
                             else if (axis.AxisState == AxisStates.MC_AS_ERRORSTOP) // 軸出現異常。
                             {
-                                axis.IsMcInitOk = false;
-                                axis.LastError = -1; // TODO 發生異常
+                                axis.IsMcInitOk = true;
+                                axis.GetAxisErrorState(ref resultCode);
                                 SalveAxisStateChangeEvent?.Invoke(slave, new SalveAxisStateChangeEventArgs()
                                 {
                                     SlaveNo = slave.SlaveNo,
@@ -356,8 +330,9 @@ namespace Motion
                             }
                             else if (axis.AxisState != AxisStates.MC_AS_STOPPING) // 軸仍在運動中。
                             {
+                                axis.IsMcInitOk = true;
                                 // 如果不在停止狀態，立刻停止。
-                                EtherCatLib.ECAT_McAxisQuickStop(slave.DeviceNo, axis.AxisNo);
+                                axis.AxisQuickStop(ref resultCode);
                             }
                         }
                         SpinWait.SpinUntil(() => false, RetryInterval);
@@ -375,219 +350,28 @@ namespace Motion
                             mcSlaveNo.ToArray(),
                             mcSubAxisNo.ToArray(),
                             (ushort)mcSubAxisNo.Count);
-                        SpinWait.SpinUntil(() => false, RetryInterval);
+                        if (ret != 0)
+                        {
+                            SpinWait.SpinUntil(() => false, RetryInterval);
+                        }
                     } while (ret != 0 && k++ < RetryCount);
                     if (ret == 0)
                     {
                         slave.IsMcInitOk = true;
+                        foreach (MotionAxis axis in slave.AxisItems)
+                        {
+                            axis.IsMcInitOk = true;
+                        }
                     }
                     else
                     {
                         slave.IsMcInitOk = false;
+                        foreach (MotionAxis axis in slave.AxisItems)
+                        {
+                            axis.IsMcInitOk = false;
+                        }
                         Logger.Error(ret, "ECAT_McInit", $"SlaveNo=[{slave.SlaveNo}] Error !!!");
                     }
-                }
-            }
-            return true;
-        }
-
-        public (MotionParam, bool) SetAxisParam(ref MotionSlave motionSlave, ushort axisNo, MotionParam motionParam)
-        {
-
-            int resultCode;
-            int i;
-            var motionParamResult = new MotionParam();
-            if (motionSlave.AxisItems == null || !motionSlave.IsMcInitOk)
-            {
-                return (motionParamResult, false);
-            }
-            // 設定 Pulse per Unit 參數。
-            if (motionParam.PPU > 0)
-            {
-                i = 0;
-                resultCode = 0;
-                do
-                {
-                    resultCode = EtherCatLib.ECAT_McSetAxisPPU(motionSlave.DeviceNo, axisNo, motionParam.PPU);
-                    SpinWait.SpinUntil(() => false, RetryInterval);
-                } while (resultCode != 0 && i++ < RetryCount);
-            }
-            double ppu = 0;
-            i = 0;
-            resultCode = 0;
-            do
-            {
-                resultCode = EtherCatLib.ECAT_McGetAxisPPU(motionSlave.DeviceNo, axisNo, ref ppu);
-                SpinWait.SpinUntil(() => false, RetryInterval);
-            } while (resultCode != 0 && i++ < RetryCount);
-            motionParamResult.PPU = ppu;
-            // 設定自動原點復歸的模式。
-            i = 0;
-            resultCode = 0;
-            do
-            {
-                resultCode = EtherCatLib.ECAT_McSetAxisHomeMethod(motionSlave.DeviceNo, axisNo, motionParam.HomeMethod);
-                SpinWait.SpinUntil(() => false, RetryInterval);
-            } while (resultCode != 0 && i++ < RetryCount);
-            int homeMethod = 0;
-            i = 0;
-            resultCode = 0;
-            do
-            {
-                resultCode = EtherCatLib.ECAT_McGetAxisHomeMethod(motionSlave.DeviceNo, axisNo, ref homeMethod);
-                SpinWait.SpinUntil(() => false, RetryInterval);
-            } while (resultCode != 0 && i++ < RetryCount);
-            motionParamResult.HomeMethod = homeMethod;
-            // 設定執行自動原點復歸時使用的速度。
-            if (motionParam.ORGHomeSpeed > 0 && motionParam.EZHomeSpeed > 0)
-            {
-                i = 0;
-                resultCode = 0;
-                do
-                {
-                    resultCode = EtherCatLib.ECAT_McSetAxisHomeSpeed(motionSlave.DeviceNo, axisNo, motionParam.ORGHomeSpeed, motionParam.EZHomeSpeed);
-                    SpinWait.SpinUntil(() => false, RetryInterval);
-                } while (resultCode != 0 && i++ < RetryCount);
-            }
-            double ORGHomeSpeed = 0;
-            double EZHomeSpeed = 0;
-            i = 0;
-            resultCode = 0;
-            do
-            {
-                resultCode = EtherCatLib.ECAT_McGetAxisHomeSpeed(motionSlave.DeviceNo, axisNo, ref ORGHomeSpeed, ref EZHomeSpeed);
-                SpinWait.SpinUntil(() => false, RetryInterval);
-            } while (resultCode != 0 && i++ < RetryCount);
-            motionParamResult.ORGHomeSpeed = ORGHomeSpeed;
-            motionParamResult.EZHomeSpeed = EZHomeSpeed;
-            // 設定執行自動原點復歸時使用的加速度。
-            if (motionParam.HomeAcc > 0)
-            {
-                i = 0;
-                resultCode = 0;
-                do
-                {
-                    resultCode = EtherCatLib.ECAT_McSetAxisHomeAcc(motionSlave.DeviceNo, axisNo, motionParam.HomeAcc);
-                    SpinWait.SpinUntil(() => false, RetryInterval);
-                } while (resultCode != 0 && i++ < RetryCount);
-            }
-            double homeAcc = 0;
-            i = 0;
-            resultCode = 0;
-            do
-            {
-                resultCode = EtherCatLib.ECAT_McGetAxisHomeAcc(motionSlave.DeviceNo, axisNo, ref homeAcc);
-                SpinWait.SpinUntil(() => false, RetryInterval);
-            } while (resultCode != 0 && i++ < RetryCount);
-            motionParamResult.HomeAcc = homeAcc;
-            // 設定速度/加速度換算參數。
-            if (motionParam.VelScale > 0 && motionParam.AccScale > 0)
-            {
-                i = 0;
-                resultCode = 0;
-                do
-                {
-                    resultCode = EtherCatLib.ECAT_McSetAxisVelAccScale(motionSlave.DeviceNo, axisNo, motionParam.VelScale, motionParam.AccScale);
-                    SpinWait.SpinUntil(() => false, RetryInterval);
-                } while (resultCode != 0 && i++ < RetryCount);
-            }
-            double velScale = 0;
-            double accScale = 0;
-            i = 0;
-            resultCode = 0;
-            do
-            {
-                resultCode = EtherCatLib.ECAT_McGetAxisVelAccScale(motionSlave.DeviceNo, axisNo, ref velScale, ref accScale);
-                SpinWait.SpinUntil(() => false, RetryInterval);
-            } while (resultCode != 0 && i++ < RetryCount);
-            motionParamResult.VelScale = velScale;
-            motionParamResult.AccScale = accScale;
-            // 設定執行單軸運動時使用的加減速時間。
-            if (motionParam.AccTime > 0 && motionParam.DecTime > 0)
-            {
-                i = 0;
-                resultCode = 0;
-                do
-                {
-                    resultCode = EtherCatLib.ECAT_McSetAxisAccDecTime_Stepper(motionSlave.DeviceNo, axisNo, motionParam.AccTime, motionParam.DecTime);
-                    SpinWait.SpinUntil(() => false, RetryInterval);
-                } while (resultCode != 0 && i++ < RetryCount);
-            }
-            ushort accTime = 0;
-            ushort decTime = 0;
-            i = 0;
-            resultCode = 0;
-            do
-            {
-                resultCode = EtherCatLib.ECAT_McGetAxisAccDecTime_Stepper(motionSlave.DeviceNo, axisNo, ref accTime, ref decTime);
-                SpinWait.SpinUntil(() => false, RetryInterval);
-            } while (resultCode != 0 && i++ < RetryCount);
-            motionParamResult.AccTime = accTime;
-            motionParamResult.DecTime = decTime;
-            // 設定執行單軸運動時使用的加速度類型。
-            i = 0;
-            resultCode = 0;
-            do
-            {
-                resultCode = EtherCatLib.ECAT_McSetAxisAccDecType(motionSlave.DeviceNo, axisNo, (ushort)motionParam.AccDecType);
-                SpinWait.SpinUntil(() => false, RetryInterval);
-            } while (resultCode != 0 && i++ < RetryCount);
-            ushort accDecType = 0;
-            i = 0;
-            resultCode = 0;
-            do
-            {
-                resultCode = EtherCatLib.ECAT_McGetAxisAccDecType(motionSlave.DeviceNo, axisNo, ref accDecType);
-                SpinWait.SpinUntil(() => false, RetryInterval);
-            } while (resultCode != 0 && i++ < RetryCount);
-            motionParamResult.AccDecType = (AccDecType)accDecType;
-            // 設定指定軸號之位置軟體極限。
-            uint AbortCode = 0;
-            i = 0;
-            resultCode = 0;
-            do
-            {
-                resultCode = EtherCatLib.ECAT_McSetAxisPosSoftwareLimit(motionSlave.DeviceNo, axisNo, motionParam.PosSoftwareMaxLimit, motionParam.PosSoftwareMinLimit, ref AbortCode);
-                SpinWait.SpinUntil(() => false, RetryInterval);
-            } while (resultCode != 0 && i++ < RetryCount);
-            double posSoftwareMaxLimit = 0;
-            double posSoftwareMinLimit = 0;
-            i = 0;
-            resultCode = 0;
-            do
-            {
-                resultCode = EtherCatLib.ECAT_McGetAxisPosSoftwareLimit(motionSlave.DeviceNo, axisNo, ref posSoftwareMaxLimit, ref posSoftwareMinLimit, ref AbortCode);
-                SpinWait.SpinUntil(() => false, RetryInterval);
-            } while (resultCode != 0 && i++ < RetryCount);
-            motionParamResult.PosSoftwareMaxLimit = posSoftwareMaxLimit;
-            motionParam.PosSoftwareMinLimit = posSoftwareMinLimit;
-            return (motionParamResult, true);
-        }
-
-        public bool ServoControl(MotionAxis motionAxis, bool isOn)
-        {
-            int ret = 0;
-            int i = 0;
-            do
-            {
-                ret = EtherCatLib.ECAT_McSetAxisServoOn(motionAxis.DeviceNo, motionAxis.AxisNo, (ushort)(isOn ? 1 : 0));
-                if (ret != 0)
-                {
-                    SpinWait.SpinUntil(() => false, RetryInterval);
-                }
-            } while (ret != 0 && i++ < RetryCount);
-            return ret == 0;
-        }
-
-
-        public bool Initialize(ref int resultCode)
-        {
-            if (OpenDevice(ref resultCode) && StartOpTask(ref resultCode))
-            {
-                SlaveItems = new MotionSlave[SlavesResp];
-                for (int i = 0; i < SlaveItems.Length; i++)
-                {
-
                 }
             }
             return true;
