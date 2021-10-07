@@ -1,4 +1,5 @@
 ﻿using MotionDemo.Properties;
+using MotionDemo.Utils;
 
 using System;
 using System.Configuration;
@@ -91,7 +92,6 @@ namespace Motion
                                 AxisListView.Items.Add(listItem);
                             }
                         }
-                        SlaveStateListView.Items[0].SubItems[2].Text = MainMotionController.SlaveItems[i].AlState.ToString();
                     }
                 }
             }
@@ -113,7 +113,7 @@ namespace Motion
                 MotionAxis axis = MainMotionController.SlaveItems[i].AxisItems[0];
                 if (axis.GetAxisProcessState() && AxisListView.Items[0] != null)
                 {
-                    AxisListView.Items[0].SubItems[1].Text = axis.AxisState.ToString();
+                    AxisListView.Items[0].SubItems[1].Text = axis.AxisState.GetDescriptionText();
                     AxisListView.Items[0].SubItems[2].Text = axis.LastError.ToString();
                     AxisListView.Items[0].SubItems[3].Text = axis.DriveError.ToString();
                     AxisListView.Items[0].SubItems[4].Text = axis.CommandPos.ToString();
