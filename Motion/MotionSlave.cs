@@ -70,11 +70,6 @@ namespace Motion
         /// </summary>
         public string SlaveName { get; private set; }
 
-        /// <summary>
-        /// 所有軸是否初始化完成。
-        /// </summary>
-        public bool IsMcInitOk { get; internal set; }
-
         private MotionAxis[] axisItems;
         /// <summary>
         /// Axis 模塊在 EtherCAT 網絡中的位置，最多 64 軸。
@@ -86,13 +81,18 @@ namespace Motion
                 new MotionAxis[EtherCatDef.MC_AXIS_NO_MAX] : value;
         }
 
-        public MotionSlave(
-            ushort deviceNo,
-            ushort slaveNo)
+        public MotionSlave(ushort deviceNo, ushort slaveNo)
         {
             DeviceNo = deviceNo;
             SlaveNo = slaveNo;
-            IsMcInitOk = false;
+            Alias = 0;
+            ProductCode = 0;
+            VendorID = 0;
+            RevisionNo = 0;
+            SerialNo = 0;
+            AlState = AlStates.ECAT_AS_INIT;
+            SlaveName = string.Empty;
+            SlaveType = SlaveType.SLAVE_TYPE_GENERIC;
         }
 
         /// <summary>
@@ -105,8 +105,8 @@ namespace Motion
             uint slaveType = 0;
             byte alState = 0;
             var slvName = new StringBuilder(string.Empty, EtherCatDef.MAX_SLAVE_NAME_LENGTH);
-            int i = 0;
-            do
+            int retryCount = 0;
+            while (retryCount++ < MotionController.RetryCount)
             {
                 resultCode = EtherCatLib.ECAT_GetSlaveInfo(
                     DeviceNo,
@@ -119,11 +119,13 @@ namespace Motion
                     ref alState,
                     ref slaveType,
                     slvName);
-                if (resultCode != 0)
+                if (resultCode == 0)
                 {
-                    SpinWait.SpinUntil(() => false, MotionController.RetryInterval);
+                    break;
                 }
-            } while (resultCode != 0 && i++ < MotionController.RetryCount);
+                Logger.Error(resultCode, "ECAT_GetSlaveInfo", $"嘗試次數=[{retryCount}]");
+                SpinWait.SpinUntil(() => false, MotionController.RetryInterval);
+            }
             if (resultCode == 0)
             {
                 AlState = (AlStates)alState;
@@ -131,10 +133,7 @@ namespace Motion
                 SlaveName = slvName.ToString();
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         /// <summary>

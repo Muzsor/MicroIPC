@@ -17,7 +17,7 @@ namespace Motion
         {
             InitializeComponent();
             int resultCode = 0;
-            Text += $" DllVersion:{MotionController.GetVersion(ref resultCode)}";
+            //Text += $" DllVersion:{MotionController.GetVersion(ref resultCode)}";
             DeviceCount = MotionController.GetDeviceCount(new byte[16], ref resultCode);
             if (DeviceCount > 0)
             {
@@ -38,7 +38,7 @@ namespace Motion
         private void InitializeMotion()
         {
             int resultCode = 0;
-            if (MainMotionController.InitializeSlave(ref resultCode))
+            if (MainMotionController.InitializeSlave())
             {
                 for (int i = 0; i < MainMotionController.SlaveItems.Length; i++)
                 {
@@ -50,11 +50,11 @@ namespace Motion
                         if (slave.SetAxisNo(axisList, ref resultCode))
                         {
                             var listItem = new ListViewItem(slave.SlaveNo.ToString());  // 0
-                            listItem.SubItems.Add(slave.SlaveName.ToString()); // 1
-                            listItem.SubItems.Add(slave.AlState.ToString()); // 2
-                            listItem.SubItems.Add(slave.IsMcInitOk.ToString()); // 3 
+                            listItem.SubItems.Add(slave.Alias.ToString()); // 1
+                            listItem.SubItems.Add(slave.SlaveName.ToString()); // 2
+                            listItem.SubItems.Add(slave.SlaveType.ToString()); // 3
+                            listItem.SubItems.Add(slave.AlState.ToString()); // 4
                             SlaveStateListView.Items.Add(listItem);
-                            SlaveStateListView.Items[0].SubItems[2].Text = slave.AlState.ToString();
                         }
                     }
                 }
@@ -96,11 +96,10 @@ namespace Motion
                 MotionSlave slave = MainMotionController.SlaveItems[i];
                 if (slave.GetSlaveInfo(ref resultCode) && SlaveStateListView.Items.ContainsKey(slave.SerialNo.ToString()))
                 {
-                    SlaveStateListView.Items[0].SubItems[2].Text = slave.AlState.ToString();
-                    SlaveStateListView.Items[0].SubItems[3].Text = slave.IsMcInitOk.ToString();
+                    SlaveStateListView.Items[0].SubItems[4].Text = slave.AlState.ToString();
                 }
                 MotionAxis axis = MainMotionController.SlaveItems[i].AxisItems[0];
-                if (axis.GetAxisProcessState(ref resultCode) && AxisListView.Items.ContainsKey(axis.AxisNo.ToString()))
+                if (axis.GetAxisProcessState() && AxisListView.Items.ContainsKey(axis.AxisNo.ToString()))
                 {
                     AxisListView.Items[0].SubItems[1].Text = axis.AxisState.ToString();
                     AxisListView.Items[0].SubItems[2].Text = axis.LastError.ToString();
@@ -112,16 +111,8 @@ namespace Motion
             }
         }
 
-        private void ServoOnButton_Click(object sender, System.EventArgs e)
-        {
-            int resultCode = 0;
-            MainMotionController.SlaveItems[0].AxisItems[0].ServoControl(true, ref resultCode);
-        }
+        private void ServoOnButton_Click(object sender, System.EventArgs e) => MainMotionController.SlaveItems[0].AxisItems[0].ServoControl(true);
 
-        private void ServoOff_Click(object sender, EventArgs e)
-        {
-            int resultCode = 0;
-            MainMotionController.SlaveItems[0].AxisItems[0].ServoControl(false, ref resultCode);
-        }
+        private void ServoOff_Click(object sender, EventArgs e) => MainMotionController.SlaveItems[0].AxisItems[0].ServoControl(false);
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Motion
+﻿namespace Motion
 {
     internal static class EtherCatDef
     {
@@ -66,21 +64,27 @@ namespace Motion
 
         /*****************************************************************************/
         /** EtherCAT AL State */
-        [Flags]
-        public enum AlStates
-        {
-            ECAT_AS_INIT = 0x00,
-            ECAT_AS_PREOP = 0x02,
-            ECAT_AS_SAFEOP = 0x04,
-            ECAT_AS_OP = 0x08
-        }
+        /** EtherCAT AL狀態 */
+        /// <summary>
+        /// Init狀態。
+        /// </summary>
         public const int ECAT_AS_INIT = 0x00;
+        /// <summary>
+        /// Pre-Operational狀態。
+        /// </summary>
         public const int ECAT_AS_PREOP = 0x02;
+        /// <summary>
+        /// Safe-Operational狀態。
+        /// </summary>
         public const int ECAT_AS_SAFEOP = 0x04;
+        /// <summary>
+        /// Operational狀態。
+        /// </summary>
         public const int ECAT_AS_OP = 0x08;
 
         /*****************************************************************************/
         /** Device OP task cycle time */
+        /** 從站通訊週期編號 */
         public const int DEV_OP_CYCLE_TIME_1MS = 0;     /**< 1 ms */
         public const int DEV_OP_CYCLE_TIME_2MS = 1;     /**< 2 ms */
         public const int DEV_OP_CYCLE_TIME_3MS = 2;     /**< 3 ms */
@@ -111,18 +115,7 @@ namespace Motion
 
         /*****************************************************************************/
         /** Motion Control Axis State */
-        public enum AxisStates
-        {
-            MC_AS_DISABLED = 0,
-            MC_AS_STANDSTILL = 1,
-            MC_AS_ERRORSTOP = 2,
-            MC_AS_STOPPING = 3,
-            MC_AS_HOMING = 4,
-            MC_AS_DISCRETEMOTION = 5,
-            MC_AS_CONTINUOUSMOTION = 6,
-            MC_AS_SYNCHRONIZEDMOTION = 7,
-            MC_AS_STEERWHEELMOTION = 8
-        }
+        /** 軸狀態編號 */
         /// <summary>
         /// 軸尚未啟用。
         /// </summary>

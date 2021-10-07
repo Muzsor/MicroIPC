@@ -43,9 +43,8 @@ namespace Motion
             this.uiTableLayoutPanel1 = new Sunny.UI.UITableLayoutPanel();
             this.uiTitlePanel1 = new Sunny.UI.UITitlePanel();
             this.SlaveStateListView = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader0 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.uiTitlePanel2 = new Sunny.UI.UITitlePanel();
             this.uiTitlePanel3 = new Sunny.UI.UITitlePanel();
@@ -65,6 +64,8 @@ namespace Motion
             this.ServoOff = new Sunny.UI.UIButton();
             this.ServoOnButton = new Sunny.UI.UIButton();
             this.Timer1 = new System.Windows.Forms.Timer(this.components);
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.uiTableLayoutPanel1.SuspendLayout();
             this.uiTitlePanel1.SuspendLayout();
             this.uiTitlePanel2.SuspendLayout();
@@ -260,6 +261,7 @@ namespace Motion
             // SlaveStateListView
             // 
             this.SlaveStateListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader0,
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
@@ -274,27 +276,21 @@ namespace Motion
             this.SlaveStateListView.UseCompatibleStateImageBehavior = false;
             this.SlaveStateListView.View = System.Windows.Forms.View.Details;
             // 
-            // columnHeader1
+            // columnHeader0
             // 
-            this.columnHeader1.Text = "No";
+            this.columnHeader0.Text = "編號";
             // 
             // columnHeader2
             // 
-            this.columnHeader2.Text = "Slave Name";
+            this.columnHeader2.Text = "名稱";
             this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader2.Width = 120;
             // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "AlState";
-            this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader3.Width = 120;
-            // 
             // columnHeader4
             // 
-            this.columnHeader4.Text = "IsMcInitOk";
+            this.columnHeader4.Text = "狀態";
             this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader4.Width = 120;
+            this.columnHeader4.Width = 150;
             // 
             // uiTitlePanel2
             // 
@@ -348,43 +344,43 @@ namespace Motion
             // 
             // columnHeader5
             // 
-            this.columnHeader5.Text = "No";
+            this.columnHeader5.Text = "編號";
             // 
             // columnHeader6
             // 
-            this.columnHeader6.Text = "Axis State";
+            this.columnHeader6.Text = "狀態";
             this.columnHeader6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader6.Width = 120;
+            this.columnHeader6.Width = 150;
             // 
             // columnHeader7
             // 
-            this.columnHeader7.Text = "Axis Error";
+            this.columnHeader7.Text = "最後異常代碼";
             this.columnHeader7.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader7.Width = 120;
             // 
             // columnHeader8
             // 
-            this.columnHeader8.Text = "Drive Error";
+            this.columnHeader8.Text = "驅動器異常代碼";
             this.columnHeader8.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader8.Width = 120;
+            this.columnHeader8.Width = 150;
             // 
             // columnHeader9
             // 
-            this.columnHeader9.Text = "CmdPosition";
+            this.columnHeader9.Text = "命令位置";
             this.columnHeader9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader9.Width = 150;
             // 
             // columnHeader10
             // 
-            this.columnHeader10.Text = "Position";
+            this.columnHeader10.Text = "當前位置";
             this.columnHeader10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader10.Width = 150;
             // 
             // columnHeader11
             // 
-            this.columnHeader11.Text = "Velocity";
+            this.columnHeader11.Text = "速度";
             this.columnHeader11.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader11.Width = 120;
+            this.columnHeader11.Width = 150;
             // 
             // uiTitlePanel4
             // 
@@ -475,6 +471,17 @@ namespace Motion
             this.ServoOnButton.Text = "Servo On";
             this.ServoOnButton.Click += new System.EventHandler(this.ServoOnButton_Click);
             // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "種類";
+            this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeader3.Width = 150;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "別名";
+            this.columnHeader1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
@@ -515,10 +522,9 @@ namespace Motion
         private Sunny.UI.UITableLayoutPanel uiTableLayoutPanel1;
         private Sunny.UI.UITitlePanel uiTitlePanel1;
         private System.Windows.Forms.ListView SlaveStateListView;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader0;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private Sunny.UI.UITitlePanel uiTitlePanel2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private Sunny.UI.UITitlePanel uiTitlePanel3;
         private System.Windows.Forms.ListView AxisListView;
@@ -537,6 +543,8 @@ namespace Motion
         private Sunny.UI.UIButton uiButton1;
         private Sunny.UI.UIButton uiButton4;
         private System.Windows.Forms.Timer Timer1;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
     }
 }
 

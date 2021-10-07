@@ -1,5 +1,8 @@
 ﻿namespace Motion
 {
+    /// <summary>
+    /// 軸狀態編號。
+    /// </summary>
     public enum AxisStates
     {
         /// <summary>
