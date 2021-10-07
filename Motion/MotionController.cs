@@ -245,7 +245,7 @@ namespace Motion
                 for (ushort i = 0; i < SlaveItems.Length; i++)
                 {
                     SlaveItems[i] = new MotionSlave(DeviceNo, i);
-                    SlaveItems[i].GetSlaveInfo(ref resultCode);
+                    SlaveItems[i].GetSlaveInfo();
                 }
                 if (SlaveItems.Length > 0)
                 {

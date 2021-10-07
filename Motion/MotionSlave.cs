@@ -100,11 +100,12 @@ namespace Motion
         /// </summary>
         /// <param name="resultCode"></param>
         /// <returns></returns>
-        public bool GetSlaveInfo(ref int resultCode)
+        public bool GetSlaveInfo()
         {
             uint slaveType = 0;
             byte alState = 0;
             var slvName = new StringBuilder(string.Empty, EtherCatDef.MAX_SLAVE_NAME_LENGTH);
+            int resultCode = 0;
             int retryCount = 0;
             while (retryCount++ < MotionController.RetryCount)
             {

@@ -69,13 +69,13 @@ namespace Motion
                             (_, bool result) = axis.SetAxisParam(motionConfig, ref resultCode);
                             if (result)
                             {
-                                var listItem = new ListViewItem(axis.AxisNo.ToString()); // Axis No
-                                listItem.SubItems.Add(axis.AxisState.ToString()); // Axis State
-                                listItem.SubItems.Add(string.Empty); // Axis Error
-                                listItem.SubItems.Add(string.Empty); // Drive Error
-                                listItem.SubItems.Add(string.Empty); // CmdPosition
-                                listItem.SubItems.Add(string.Empty); // Position
-                                listItem.SubItems.Add(string.Empty); // Velocity
+                                var listItem = new ListViewItem(axis.AxisNo.ToString()); // Axis No 0
+                                listItem.SubItems.Add(axis.AxisState.ToString()); // Axis State 1
+                                listItem.SubItems.Add(axis.LastError.ToString()); // Axis Error 2
+                                listItem.SubItems.Add(axis.DriveError.ToString()); // Drive Error 3
+                                listItem.SubItems.Add(axis.CommandPos.ToString()); // CmdPosition 4
+                                listItem.SubItems.Add(axis.ActualPos.ToString()); // Position 5
+                                listItem.SubItems.Add(axis.ActualVel.ToString()); // Velocity 6
                                 AxisListView.Items.Add(listItem);
                             }
                         }
@@ -94,7 +94,7 @@ namespace Motion
             for (int i = 0; i < MainMotionController.SlaveItems.Length; i++)
             {
                 MotionSlave slave = MainMotionController.SlaveItems[i];
-                if (slave.GetSlaveInfo(ref resultCode) && SlaveStateListView.Items.ContainsKey(slave.SerialNo.ToString()))
+                if (slave.GetSlaveInfo() && SlaveStateListView.Items.ContainsKey(slave.SerialNo.ToString()))
                 {
                     SlaveStateListView.Items[0].SubItems[4].Text = slave.AlState.ToString();
                 }
@@ -106,13 +106,59 @@ namespace Motion
                     AxisListView.Items[0].SubItems[3].Text = axis.DriveError.ToString();
                     AxisListView.Items[0].SubItems[4].Text = axis.CommandPos.ToString();
                     AxisListView.Items[0].SubItems[5].Text = axis.ActualPos.ToString();
-                    AxisListView.Items[0].SubItems[5].Text = axis.ActualVel.ToString();
+                    AxisListView.Items[0].SubItems[6].Text = axis.ActualVel.ToString();
                 }
             }
         }
 
-        private void ServoOnButton_Click(object sender, System.EventArgs e) => MainMotionController.SlaveItems[0].AxisItems[0].ServoControl(true);
+        private void ServoOnButton_Click(object sender, EventArgs e)
+            => MainMotionController.SlaveItems[0].AxisItems[0].ServoControl(true);
 
-        private void ServoOff_Click(object sender, EventArgs e) => MainMotionController.SlaveItems[0].AxisItems[0].ServoControl(false);
+        private void ServoOff_Click(object sender, EventArgs e)
+            => MainMotionController.SlaveItems[0].AxisItems[0].ServoControl(false);
+
+        private void MobeAbsButton_Click(object sender, EventArgs e)
+        {
+            if (sender is Control button)
+            {
+                button.Enabled = false;
+                double position = Convert.ToDouble(AxisPositionTextBox.Text);
+                double velocity = Convert.ToDouble(AxisVelTextBox.Text);
+                MainMotionController.SlaveItems[0].AxisItems[0].MoveAbs(position, velocity);
+                button.Enabled = true;
+            }
+        }
+
+        private void MoveRelButton_Click(object sender, EventArgs e)
+        {
+            if (sender is Control button)
+            {
+                button.Enabled = false;
+                double position = Convert.ToDouble(AxisPositionTextBox.Text);
+                double velocity = Convert.ToDouble(AxisVelTextBox.Text);
+                MainMotionController.SlaveItems[0].AxisItems[0].MoveRel(position, velocity);
+                button.Enabled = true;
+            }
+        }
+
+        private void StopButton_Click(object sender, EventArgs e)
+        {
+            if (sender is Control button)
+            {
+                button.Enabled = false;
+                MainMotionController.SlaveItems[0].AxisItems[0].AxisStop();
+                button.Enabled = true;
+            }
+        }
+
+        private void QuickStopButton_Click(object sender, EventArgs e)
+        {
+            if (sender is Control button)
+            {
+                button.Enabled = false;
+                MainMotionController.SlaveItems[0].AxisItems[0].AxisQuickStop();
+                button.Enabled = true;
+            }
+        }
     }
 }

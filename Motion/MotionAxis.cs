@@ -547,6 +547,27 @@ namespace Motion
         }
 
         /// <summary>
+        /// 減速停止運動。
+        /// </summary>
+        /// <returns></returns>
+        public bool AxisStop()
+        {
+            int resultCode = 0;
+            int retryCount = 0;
+            while (retryCount++ < MotionController.RetryCount)
+            {
+                resultCode = EtherCatLib.ECAT_McAxisStop(DeviceNo, AxisNo);
+                if (resultCode == 0)
+                {
+                    break;
+                }
+                Logger.Error(resultCode, "ECAT_McAxisStop", $"嘗試次數=[{retryCount}]");
+                SpinWait.SpinUntil(() => false, MotionController.RetryInterval);
+            }
+            return resultCode == 0;
+        }
+
+        /// <summary>
         /// 立即停止運動。
         /// </summary>
         /// <param name="resultCode"></param>
@@ -567,5 +588,53 @@ namespace Motion
             }
             return resultCode == 0;
         }
+
+        /// <summary>
+        /// 移動到絕對位置。
+        /// </summary>
+        /// <param name="postion"></param>
+        /// <param name="velocity"></param>
+        /// <returns></returns>
+        public bool MoveAbs(double postion, double velocity)
+        {
+            int resultCode = 0;
+            int retryCount = 0;
+            while (retryCount++ < MotionController.RetryCount)
+            {
+                resultCode = EtherCatLib.ECAT_McAxisMoveAbs(DeviceNo, AxisNo, postion, velocity);
+                if (resultCode == 0)
+                {
+                    break;
+                }
+                Logger.Error(resultCode, "ECAT_McAxisMoveAbs", $"嘗試次數=[{retryCount}]");
+                SpinWait.SpinUntil(() => false, MotionController.RetryInterval);
+            }
+            return resultCode == 0;
+        }
+
+        /// <summary>
+        /// 移動到相對位置。
+        /// </summary>
+        /// <param name="postion"></param>
+        /// <param name="velocity"></param>
+        /// <returns></returns>
+        public bool MoveRel(double postion, double velocity)
+        {
+            int resultCode = 0;
+            int retryCount = 0;
+            while (retryCount++ < MotionController.RetryCount)
+            {
+                resultCode = EtherCatLib.ECAT_McAxisMoveRel(DeviceNo, AxisNo, postion, velocity);
+                if (resultCode == 0)
+                {
+                    break;
+                }
+                Logger.Error(resultCode, "ECAT_McAxisMoveRel", $"嘗試次數=[{retryCount}]");
+                SpinWait.SpinUntil(() => false, MotionController.RetryInterval);
+            }
+            return resultCode == 0;
+        }
+
+
     }
 }

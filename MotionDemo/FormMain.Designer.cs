@@ -30,7 +30,7 @@ namespace Motion
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.PositionTextBox = new Sunny.UI.UITextBox();
+            this.AxisPositionTextBox = new Sunny.UI.UITextBox();
             this.uiLabel1 = new Sunny.UI.UILabel();
             this.uiLabel2 = new Sunny.UI.UILabel();
             this.uiLabel3 = new Sunny.UI.UILabel();
@@ -44,7 +44,9 @@ namespace Motion
             this.uiTitlePanel1 = new Sunny.UI.UITitlePanel();
             this.SlaveStateListView = new System.Windows.Forms.ListView();
             this.columnHeader0 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.uiTitlePanel2 = new Sunny.UI.UITitlePanel();
             this.uiTitlePanel3 = new Sunny.UI.UITitlePanel();
@@ -57,15 +59,16 @@ namespace Motion
             this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.uiTitlePanel4 = new Sunny.UI.UITitlePanel();
-            this.uiButton4 = new Sunny.UI.UIButton();
-            this.uiButton3 = new Sunny.UI.UIButton();
-            this.uiButton2 = new Sunny.UI.UIButton();
-            this.uiButton1 = new Sunny.UI.UIButton();
+            this.AxisVelTextBox = new Sunny.UI.UITextBox();
+            this.uiLabel6 = new Sunny.UI.UILabel();
+            this.ErrorRestButton = new Sunny.UI.UIButton();
+            this.QuickStopButton = new Sunny.UI.UIButton();
+            this.StopButton = new Sunny.UI.UIButton();
+            this.MoveRelButton = new Sunny.UI.UIButton();
+            this.MobeAbsButton = new Sunny.UI.UIButton();
             this.ServoOff = new Sunny.UI.UIButton();
             this.ServoOnButton = new Sunny.UI.UIButton();
             this.Timer1 = new System.Windows.Forms.Timer(this.components);
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.uiTableLayoutPanel1.SuspendLayout();
             this.uiTitlePanel1.SuspendLayout();
             this.uiTitlePanel2.SuspendLayout();
@@ -73,21 +76,28 @@ namespace Motion
             this.uiTitlePanel4.SuspendLayout();
             this.SuspendLayout();
             // 
-            // PositionTextBox
+            // AxisPositionTextBox
             // 
-            this.PositionTextBox.ButtonSymbol = 61761;
-            this.PositionTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.PositionTextBox.FillColor = System.Drawing.Color.White;
-            this.PositionTextBox.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.PositionTextBox.Location = new System.Drawing.Point(100, 124);
-            this.PositionTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.PositionTextBox.Maximum = 2147483647D;
-            this.PositionTextBox.Minimum = -2147483648D;
-            this.PositionTextBox.MinimumSize = new System.Drawing.Size(1, 1);
-            this.PositionTextBox.Name = "PositionTextBox";
-            this.PositionTextBox.Size = new System.Drawing.Size(189, 40);
-            this.PositionTextBox.TabIndex = 0;
-            this.PositionTextBox.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            this.AxisPositionTextBox.ButtonSymbol = 61761;
+            this.AxisPositionTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.AxisPositionTextBox.FillColor = System.Drawing.Color.White;
+            this.AxisPositionTextBox.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.AxisPositionTextBox.HasMaximum = true;
+            this.AxisPositionTextBox.HasMinimum = true;
+            this.AxisPositionTextBox.Location = new System.Drawing.Point(88, 171);
+            this.AxisPositionTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.AxisPositionTextBox.Maximum = 2147483647D;
+            this.AxisPositionTextBox.MaximumEnabled = true;
+            this.AxisPositionTextBox.Minimum = -2147483648D;
+            this.AxisPositionTextBox.MinimumEnabled = true;
+            this.AxisPositionTextBox.MinimumSize = new System.Drawing.Size(1, 1);
+            this.AxisPositionTextBox.Name = "AxisPositionTextBox";
+            this.AxisPositionTextBox.Size = new System.Drawing.Size(201, 40);
+            this.AxisPositionTextBox.TabIndex = 0;
+            this.AxisPositionTextBox.Text = "0";
+            this.AxisPositionTextBox.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.AxisPositionTextBox.Type = Sunny.UI.UITextBox.UIEditType.Integer;
+            this.AxisPositionTextBox.Watermark = "命令位置";
             // 
             // uiLabel1
             // 
@@ -136,11 +146,11 @@ namespace Motion
             // uiLabel5
             // 
             this.uiLabel5.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.uiLabel5.Location = new System.Drawing.Point(3, 123);
+            this.uiLabel5.Location = new System.Drawing.Point(9, 171);
             this.uiLabel5.Name = "uiLabel5";
             this.uiLabel5.Size = new System.Drawing.Size(90, 40);
             this.uiLabel5.TabIndex = 5;
-            this.uiLabel5.Text = "Position：";
+            this.uiLabel5.Text = "目標位置：";
             this.uiLabel5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // LinkUpTextBox
@@ -271,7 +281,7 @@ namespace Motion
             this.SlaveStateListView.Location = new System.Drawing.Point(0, 50);
             this.SlaveStateListView.MultiSelect = false;
             this.SlaveStateListView.Name = "SlaveStateListView";
-            this.SlaveStateListView.Size = new System.Drawing.Size(984, 130);
+            this.SlaveStateListView.Size = new System.Drawing.Size(934, 130);
             this.SlaveStateListView.TabIndex = 12;
             this.SlaveStateListView.UseCompatibleStateImageBehavior = false;
             this.SlaveStateListView.View = System.Windows.Forms.View.Details;
@@ -280,11 +290,22 @@ namespace Motion
             // 
             this.columnHeader0.Text = "編號";
             // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "別名";
+            this.columnHeader1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "名稱";
             this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader2.Width = 120;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "種類";
+            this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeader3.Width = 150;
             // 
             // columnHeader4
             // 
@@ -302,7 +323,7 @@ namespace Motion
             this.uiTitlePanel2.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiTitlePanel2.Name = "uiTitlePanel2";
             this.uiTitlePanel2.Padding = new System.Windows.Forms.Padding(0, 50, 0, 0);
-            this.uiTitlePanel2.Size = new System.Drawing.Size(984, 180);
+            this.uiTitlePanel2.Size = new System.Drawing.Size(934, 180);
             this.uiTitlePanel2.TabIndex = 13;
             this.uiTitlePanel2.Text = "SlaveState";
             this.uiTitlePanel2.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
@@ -317,7 +338,7 @@ namespace Motion
             this.uiTitlePanel3.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiTitlePanel3.Name = "uiTitlePanel3";
             this.uiTitlePanel3.Padding = new System.Windows.Forms.Padding(0, 50, 0, 0);
-            this.uiTitlePanel3.Size = new System.Drawing.Size(984, 180);
+            this.uiTitlePanel3.Size = new System.Drawing.Size(934, 180);
             this.uiTitlePanel3.TabIndex = 14;
             this.uiTitlePanel3.Text = "AxisState";
             this.uiTitlePanel3.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
@@ -337,7 +358,7 @@ namespace Motion
             this.AxisListView.Location = new System.Drawing.Point(0, 50);
             this.AxisListView.MultiSelect = false;
             this.AxisListView.Name = "AxisListView";
-            this.AxisListView.Size = new System.Drawing.Size(984, 130);
+            this.AxisListView.Size = new System.Drawing.Size(934, 130);
             this.AxisListView.TabIndex = 15;
             this.AxisListView.UseCompatibleStateImageBehavior = false;
             this.AxisListView.View = System.Windows.Forms.View.Details;
@@ -384,12 +405,15 @@ namespace Motion
             // 
             // uiTitlePanel4
             // 
-            this.uiTitlePanel4.Controls.Add(this.uiButton4);
+            this.uiTitlePanel4.Controls.Add(this.AxisPositionTextBox);
+            this.uiTitlePanel4.Controls.Add(this.AxisVelTextBox);
+            this.uiTitlePanel4.Controls.Add(this.uiLabel6);
+            this.uiTitlePanel4.Controls.Add(this.ErrorRestButton);
+            this.uiTitlePanel4.Controls.Add(this.QuickStopButton);
             this.uiTitlePanel4.Controls.Add(this.uiLabel5);
-            this.uiTitlePanel4.Controls.Add(this.PositionTextBox);
-            this.uiTitlePanel4.Controls.Add(this.uiButton3);
-            this.uiTitlePanel4.Controls.Add(this.uiButton2);
-            this.uiTitlePanel4.Controls.Add(this.uiButton1);
+            this.uiTitlePanel4.Controls.Add(this.StopButton);
+            this.uiTitlePanel4.Controls.Add(this.MoveRelButton);
+            this.uiTitlePanel4.Controls.Add(this.MobeAbsButton);
             this.uiTitlePanel4.Controls.Add(this.ServoOff);
             this.uiTitlePanel4.Controls.Add(this.ServoOnButton);
             this.uiTitlePanel4.Font = new System.Drawing.Font("微软雅黑", 12F);
@@ -398,63 +422,157 @@ namespace Motion
             this.uiTitlePanel4.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiTitlePanel4.Name = "uiTitlePanel4";
             this.uiTitlePanel4.Padding = new System.Windows.Forms.Padding(0, 50, 0, 0);
-            this.uiTitlePanel4.Size = new System.Drawing.Size(716, 393);
+            this.uiTitlePanel4.Size = new System.Drawing.Size(666, 353);
             this.uiTitlePanel4.TabIndex = 16;
             this.uiTitlePanel4.Text = "ControlPanel";
             this.uiTitlePanel4.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // uiButton4
+            // AxisVelTextBox
             // 
-            this.uiButton4.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiButton4.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.uiButton4.Location = new System.Drawing.Point(169, 228);
-            this.uiButton4.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiButton4.Name = "uiButton4";
-            this.uiButton4.Size = new System.Drawing.Size(120, 50);
-            this.uiButton4.TabIndex = 23;
-            this.uiButton4.Text = "QuickStop";
+            this.AxisVelTextBox.ButtonSymbol = 61761;
+            this.AxisVelTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.AxisVelTextBox.DoubleValue = 150000D;
+            this.AxisVelTextBox.Enabled = false;
+            this.AxisVelTextBox.FillColor = System.Drawing.Color.White;
+            this.AxisVelTextBox.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.AxisVelTextBox.HasMaximum = true;
+            this.AxisVelTextBox.HasMinimum = true;
+            this.AxisVelTextBox.IntValue = 150000;
+            this.AxisVelTextBox.Location = new System.Drawing.Point(88, 126);
+            this.AxisVelTextBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.AxisVelTextBox.Maximum = 2147483647D;
+            this.AxisVelTextBox.MaximumEnabled = true;
+            this.AxisVelTextBox.Minimum = -2147483648D;
+            this.AxisVelTextBox.MinimumEnabled = true;
+            this.AxisVelTextBox.MinimumSize = new System.Drawing.Size(1, 1);
+            this.AxisVelTextBox.Name = "AxisVelTextBox";
+            this.AxisVelTextBox.ReadOnly = true;
+            this.AxisVelTextBox.Size = new System.Drawing.Size(201, 40);
+            this.AxisVelTextBox.TabIndex = 3;
+            this.AxisVelTextBox.Text = "150000";
+            this.AxisVelTextBox.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.AxisVelTextBox.Type = Sunny.UI.UITextBox.UIEditType.Integer;
+            this.AxisVelTextBox.Watermark = "命令位置";
             // 
-            // uiButton3
+            // uiLabel6
             // 
-            this.uiButton3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiButton3.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.uiButton3.Location = new System.Drawing.Point(43, 228);
-            this.uiButton3.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiButton3.Name = "uiButton3";
-            this.uiButton3.Size = new System.Drawing.Size(120, 50);
-            this.uiButton3.TabIndex = 18;
-            this.uiButton3.Text = "Stop";
+            this.uiLabel6.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.uiLabel6.Location = new System.Drawing.Point(9, 126);
+            this.uiLabel6.Name = "uiLabel6";
+            this.uiLabel6.Size = new System.Drawing.Size(68, 40);
+            this.uiLabel6.TabIndex = 25;
+            this.uiLabel6.Text = "速度：";
+            this.uiLabel6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // uiButton2
+            // ErrorRestButton
             // 
-            this.uiButton2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiButton2.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.uiButton2.Location = new System.Drawing.Point(169, 172);
-            this.uiButton2.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiButton2.Name = "uiButton2";
-            this.uiButton2.Size = new System.Drawing.Size(120, 50);
-            this.uiButton2.TabIndex = 19;
-            this.uiButton2.Text = "MovRel";
+            this.ErrorRestButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ErrorRestButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(155)))), ((int)(((byte)(40)))));
+            this.ErrorRestButton.FillHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(174)))), ((int)(((byte)(86)))));
+            this.ErrorRestButton.FillPressColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(137)))), ((int)(((byte)(43)))));
+            this.ErrorRestButton.FillSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(137)))), ((int)(((byte)(43)))));
+            this.ErrorRestButton.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.ErrorRestButton.Location = new System.Drawing.Point(295, 40);
+            this.ErrorRestButton.MinimumSize = new System.Drawing.Size(1, 1);
+            this.ErrorRestButton.Name = "ErrorRestButton";
+            this.ErrorRestButton.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(155)))), ((int)(((byte)(40)))));
+            this.ErrorRestButton.RectHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(174)))), ((int)(((byte)(86)))));
+            this.ErrorRestButton.RectPressColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(137)))), ((int)(((byte)(43)))));
+            this.ErrorRestButton.RectSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(137)))), ((int)(((byte)(43)))));
+            this.ErrorRestButton.Size = new System.Drawing.Size(130, 60);
+            this.ErrorRestButton.Style = Sunny.UI.UIStyle.Orange;
+            this.ErrorRestButton.StyleCustomMode = true;
+            this.ErrorRestButton.TabIndex = 24;
+            this.ErrorRestButton.Text = "ErrorRest";
             // 
-            // uiButton1
+            // QuickStopButton
             // 
-            this.uiButton1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.uiButton1.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.uiButton1.Location = new System.Drawing.Point(43, 172);
-            this.uiButton1.MinimumSize = new System.Drawing.Size(1, 1);
-            this.uiButton1.Name = "uiButton1";
-            this.uiButton1.Size = new System.Drawing.Size(120, 50);
-            this.uiButton1.TabIndex = 20;
-            this.uiButton1.Text = "MovAbs";
+            this.QuickStopButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.QuickStopButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
+            this.QuickStopButton.FillHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(127)))), ((int)(((byte)(128)))));
+            this.QuickStopButton.FillPressColor = System.Drawing.Color.FromArgb(((int)(((byte)(202)))), ((int)(((byte)(87)))), ((int)(((byte)(89)))));
+            this.QuickStopButton.FillSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(202)))), ((int)(((byte)(87)))), ((int)(((byte)(89)))));
+            this.QuickStopButton.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.QuickStopButton.Location = new System.Drawing.Point(159, 285);
+            this.QuickStopButton.MinimumSize = new System.Drawing.Size(1, 1);
+            this.QuickStopButton.Name = "QuickStopButton";
+            this.QuickStopButton.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
+            this.QuickStopButton.RectHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(127)))), ((int)(((byte)(128)))));
+            this.QuickStopButton.RectPressColor = System.Drawing.Color.FromArgb(((int)(((byte)(202)))), ((int)(((byte)(87)))), ((int)(((byte)(89)))));
+            this.QuickStopButton.RectSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(202)))), ((int)(((byte)(87)))), ((int)(((byte)(89)))));
+            this.QuickStopButton.Size = new System.Drawing.Size(130, 60);
+            this.QuickStopButton.Style = Sunny.UI.UIStyle.Red;
+            this.QuickStopButton.StyleCustomMode = true;
+            this.QuickStopButton.TabIndex = 23;
+            this.QuickStopButton.Text = "QuickStop";
+            this.QuickStopButton.Click += new System.EventHandler(this.QuickStopButton_Click);
+            // 
+            // StopButton
+            // 
+            this.StopButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.StopButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
+            this.StopButton.FillHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(127)))), ((int)(((byte)(128)))));
+            this.StopButton.FillPressColor = System.Drawing.Color.FromArgb(((int)(((byte)(202)))), ((int)(((byte)(87)))), ((int)(((byte)(89)))));
+            this.StopButton.FillSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(202)))), ((int)(((byte)(87)))), ((int)(((byte)(89)))));
+            this.StopButton.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.StopButton.Location = new System.Drawing.Point(13, 285);
+            this.StopButton.MinimumSize = new System.Drawing.Size(1, 1);
+            this.StopButton.Name = "StopButton";
+            this.StopButton.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
+            this.StopButton.RectHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(127)))), ((int)(((byte)(128)))));
+            this.StopButton.RectPressColor = System.Drawing.Color.FromArgb(((int)(((byte)(202)))), ((int)(((byte)(87)))), ((int)(((byte)(89)))));
+            this.StopButton.RectSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(202)))), ((int)(((byte)(87)))), ((int)(((byte)(89)))));
+            this.StopButton.Size = new System.Drawing.Size(130, 60);
+            this.StopButton.Style = Sunny.UI.UIStyle.Red;
+            this.StopButton.StyleCustomMode = true;
+            this.StopButton.TabIndex = 18;
+            this.StopButton.Text = "Stop";
+            this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
+            // 
+            // MoveRelButton
+            // 
+            this.MoveRelButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.MoveRelButton.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.MoveRelButton.Location = new System.Drawing.Point(159, 219);
+            this.MoveRelButton.MinimumSize = new System.Drawing.Size(1, 1);
+            this.MoveRelButton.Name = "MoveRelButton";
+            this.MoveRelButton.Size = new System.Drawing.Size(130, 60);
+            this.MoveRelButton.StyleCustomMode = true;
+            this.MoveRelButton.TabIndex = 19;
+            this.MoveRelButton.Text = "MoveRel";
+            this.MoveRelButton.Click += new System.EventHandler(this.MoveRelButton_Click);
+            // 
+            // MobeAbsButton
+            // 
+            this.MobeAbsButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.MobeAbsButton.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.MobeAbsButton.Location = new System.Drawing.Point(13, 219);
+            this.MobeAbsButton.MinimumSize = new System.Drawing.Size(1, 1);
+            this.MobeAbsButton.Name = "MobeAbsButton";
+            this.MobeAbsButton.Size = new System.Drawing.Size(130, 60);
+            this.MobeAbsButton.StyleCustomMode = true;
+            this.MobeAbsButton.TabIndex = 20;
+            this.MobeAbsButton.Text = "MobeAbs";
+            this.MobeAbsButton.Click += new System.EventHandler(this.MobeAbsButton_Click);
             // 
             // ServoOff
             // 
             this.ServoOff.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ServoOff.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
+            this.ServoOff.FillHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(127)))), ((int)(((byte)(128)))));
+            this.ServoOff.FillPressColor = System.Drawing.Color.FromArgb(((int)(((byte)(202)))), ((int)(((byte)(87)))), ((int)(((byte)(89)))));
+            this.ServoOff.FillSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(202)))), ((int)(((byte)(87)))), ((int)(((byte)(89)))));
             this.ServoOff.Font = new System.Drawing.Font("微软雅黑", 12F);
             this.ServoOff.Location = new System.Drawing.Point(149, 40);
             this.ServoOff.MinimumSize = new System.Drawing.Size(1, 1);
             this.ServoOff.Name = "ServoOff";
+            this.ServoOff.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
+            this.ServoOff.RectHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(127)))), ((int)(((byte)(128)))));
+            this.ServoOff.RectPressColor = System.Drawing.Color.FromArgb(((int)(((byte)(202)))), ((int)(((byte)(87)))), ((int)(((byte)(89)))));
+            this.ServoOff.RectSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(202)))), ((int)(((byte)(87)))), ((int)(((byte)(89)))));
             this.ServoOff.Size = new System.Drawing.Size(140, 80);
+            this.ServoOff.Style = Sunny.UI.UIStyle.Red;
+            this.ServoOff.StyleCustomMode = true;
             this.ServoOff.TabIndex = 21;
             this.ServoOff.Text = "Servo Off";
             this.ServoOff.Click += new System.EventHandler(this.ServoOff_Click);
@@ -462,31 +580,30 @@ namespace Motion
             // ServoOnButton
             // 
             this.ServoOnButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ServoOnButton.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(190)))), ((int)(((byte)(40)))));
+            this.ServoOnButton.FillHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(202)))), ((int)(((byte)(81)))));
+            this.ServoOnButton.FillPressColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(168)))), ((int)(((byte)(35)))));
+            this.ServoOnButton.FillSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(168)))), ((int)(((byte)(35)))));
             this.ServoOnButton.Font = new System.Drawing.Font("微软雅黑", 12F);
             this.ServoOnButton.Location = new System.Drawing.Point(3, 40);
             this.ServoOnButton.MinimumSize = new System.Drawing.Size(1, 1);
             this.ServoOnButton.Name = "ServoOnButton";
+            this.ServoOnButton.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(190)))), ((int)(((byte)(40)))));
+            this.ServoOnButton.RectHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(202)))), ((int)(((byte)(81)))));
+            this.ServoOnButton.RectPressColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(168)))), ((int)(((byte)(35)))));
+            this.ServoOnButton.RectSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(168)))), ((int)(((byte)(35)))));
             this.ServoOnButton.Size = new System.Drawing.Size(140, 80);
+            this.ServoOnButton.Style = Sunny.UI.UIStyle.Green;
+            this.ServoOnButton.StyleCustomMode = true;
             this.ServoOnButton.TabIndex = 22;
             this.ServoOnButton.Text = "Servo On";
             this.ServoOnButton.Click += new System.EventHandler(this.ServoOnButton_Click);
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "種類";
-            this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader3.Width = 150;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "別名";
-            this.columnHeader1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 761);
+            this.ClientSize = new System.Drawing.Size(934, 717);
             this.Controls.Add(this.uiTitlePanel4);
             this.Controls.Add(this.uiTitlePanel3);
             this.Controls.Add(this.uiTitlePanel2);
@@ -497,6 +614,7 @@ namespace Motion
             this.MaximizeBox = false;
             this.Name = "FormMain";
             this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MotionDemo";
             this.uiTableLayoutPanel1.ResumeLayout(false);
             this.uiTitlePanel1.ResumeLayout(false);
@@ -509,7 +627,7 @@ namespace Motion
 
         #endregion
 
-        private Sunny.UI.UITextBox PositionTextBox;
+        private Sunny.UI.UITextBox AxisPositionTextBox;
         private Sunny.UI.UILabel uiLabel1;        
         private Sunny.UI.UILabel uiLabel2;
         private Sunny.UI.UILabel uiLabel3;
@@ -538,13 +656,16 @@ namespace Motion
         private Sunny.UI.UITitlePanel uiTitlePanel4;
         private Sunny.UI.UIButton ServoOnButton;
         private Sunny.UI.UIButton ServoOff;                
-        private Sunny.UI.UIButton uiButton3;
-        private Sunny.UI.UIButton uiButton2;
-        private Sunny.UI.UIButton uiButton1;
-        private Sunny.UI.UIButton uiButton4;
+        private Sunny.UI.UIButton StopButton;
+        private Sunny.UI.UIButton MoveRelButton;
+        private Sunny.UI.UIButton MobeAbsButton;
+        private Sunny.UI.UIButton QuickStopButton;
         private System.Windows.Forms.Timer Timer1;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader1;
+        private Sunny.UI.UIButton ErrorRestButton;
+        private Sunny.UI.UILabel uiLabel6;
+        private Sunny.UI.UITextBox AxisVelTextBox;
     }
 }
 
