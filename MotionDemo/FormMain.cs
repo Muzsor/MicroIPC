@@ -27,6 +27,18 @@ namespace Motion
             }
         }
 
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (MainMotionController.SlaveItems != null && MainMotionController.SlaveItems[0].AxisItems != null)
+            {
+                MainMotionController.SlaveItems[0].AxisItems[0].AxisQuickStop();
+                MainMotionController.SlaveItems[0].AxisItems[0].ServoControl(false);
+            }
+            int resultCode = 0;
+            MainMotionController.StopOpTask(ref resultCode);
+            MainMotionController.CloseDevice(ref resultCode);
+        }
+
         private void MainMotionController_DeviceStateChangeEvent(object sender, DeviceStateChangeEventArgs e)
         {
             LinkUpTextBox.Text = e.IsLinkUp ? "Connect" : "DisConnect";
@@ -94,12 +106,12 @@ namespace Motion
             for (int i = 0; i < MainMotionController.SlaveItems.Length; i++)
             {
                 MotionSlave slave = MainMotionController.SlaveItems[i];
-                if (slave.GetSlaveInfo() && SlaveStateListView.Items.ContainsKey(slave.SerialNo.ToString()))
+                if (slave.GetSlaveInfo() && SlaveStateListView.Items[0] != null)
                 {
                     SlaveStateListView.Items[0].SubItems[4].Text = slave.AlState.ToString();
                 }
                 MotionAxis axis = MainMotionController.SlaveItems[i].AxisItems[0];
-                if (axis.GetAxisProcessState() && AxisListView.Items.ContainsKey(axis.AxisNo.ToString()))
+                if (axis.GetAxisProcessState() && AxisListView.Items[0] != null)
                 {
                     AxisListView.Items[0].SubItems[1].Text = axis.AxisState.ToString();
                     AxisListView.Items[0].SubItems[2].Text = axis.LastError.ToString();

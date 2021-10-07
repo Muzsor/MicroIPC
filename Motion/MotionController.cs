@@ -102,8 +102,8 @@ namespace Motion
         {
             var str = new StringBuilder();
             ushort size = 0;
-            int i = 0;
-            while (i++ < RetryCount)
+            int retryCount = 0;
+            while (retryCount++ < RetryCount)
             {
                 // ECAT-M801 實體卡片上可以更改卡號
                 // 傳入 Card ID(卡號)，取得目前卡片上可使用裝置的數量
@@ -112,7 +112,7 @@ namespace Motion
                 {
                     break;
                 }
-                Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"嘗試次數=[{i}]");
+                Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"嘗試次數=[{retryCount}]");
                 SpinWait.SpinUntil(() => false, RetryInterval);
             }
             return resultCode == 0 ? size : (ushort)0;
@@ -126,8 +126,8 @@ namespace Motion
         public static ushort GetDeviceCount(byte[] cardId, ref int resultCode)
         {
             ushort deviceCnt = 0;
-            int i = 0;
-            while (i++ < RetryCount)
+            int retryCount = 0;
+            while (retryCount++ < RetryCount)
             {
                 // ECAT-M801 實體卡片上可以更改卡號
                 // 傳入 Card ID(卡號)，取得目前卡片上可使用裝置的數量
@@ -136,7 +136,7 @@ namespace Motion
                 {
                     break;
                 }
-                Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"嘗試次數=[{i}]");
+                Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"嘗試次數=[{retryCount}]");
                 SpinWait.SpinUntil(() => false, 200);
             }
             return resultCode == 0 ? deviceCnt : (ushort)0;
@@ -151,15 +151,33 @@ namespace Motion
         /// <returns></returns>
         public bool OpenDevice(ref int resultCode)
         {
-            int i = 0;
-            while (i++ < RetryCount)
-            {                // 開啟指定裝置編號(卡號)來做通訊操作。
+            int retryCount = 0;
+            while (retryCount++ < RetryCount)
+            {
+                // 開啟指定裝置編號(卡號)來做通訊操作。
                 resultCode = EtherCatLib.ECAT_OpenDevice(DeviceNo);
                 if (resultCode == 0)
                 {
                     break;
                 }
-                Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"嘗試次數=[{i}]");
+                Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"嘗試次數=[{retryCount}]");
+                SpinWait.SpinUntil(() => false, RetryInterval);
+            }
+            return resultCode == 0;
+        }
+
+        public bool CloseDevice(ref int resultCode)
+        {
+            int retryCount = 0;
+            while (retryCount++ < RetryCount)
+            {
+                // 關閉指定裝置編號(卡號)來做通訊操作。
+                resultCode = EtherCatLib.ECAT_CloseDevice(DeviceNo);
+                if (resultCode == 0)
+                {
+                    break;
+                }
+                Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"嘗試次數=[{retryCount}]");
                 SpinWait.SpinUntil(() => false, RetryInterval);
             }
             return resultCode == 0;
@@ -172,8 +190,8 @@ namespace Motion
         public bool GetDeviceState(ref int resultCode)
         {
             uint linkup = 0, slaveResp = 0, alstate = 0, wc = 0;
-            int i = 0;
-            while (i++ < RetryCount)
+            int retryCount = 0;
+            while (retryCount++ < RetryCount)
             {
                 resultCode = EtherCatLib.ECAT_GetDeviceState(
                     DeviceNo,
@@ -185,7 +203,7 @@ namespace Motion
                 {
                     break;
                 }
-                Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"嘗試次數=[{i}]");
+                Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"嘗試次數=[{retryCount}]");
                 SpinWait.SpinUntil(() => false, RetryInterval);
             }
             if (resultCode == 0)
@@ -210,8 +228,8 @@ namespace Motion
         /// <returns></returns>
         public bool StartOpTask(ref int resultCode)
         {
-            int i = 0;
-            while (i++ < RetryCount && GetDeviceState(ref resultCode))
+            int retryCount = 0;
+            while (retryCount++ < RetryCount && GetDeviceState(ref resultCode))
             {
                 if (AlState == AlStates.ECAT_AS_OP) // 已進入 Operational 狀態
                 {
@@ -220,7 +238,28 @@ namespace Motion
                 resultCode = AlState == AlStates.ECAT_AS_PREOP
                     ? EtherCatLib.ECAT_StartDeviceOpTask(DeviceNo, NetworkInfoNo, EtherCatDef.DEV_OP_CYCLE_TIME_1MS, RetryCount)
                     : EtherCatLib.ECAT_StopDeviceOpTask(DeviceNo);
-                Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"嘗試次數=[{i}]");
+                Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"嘗試次數=[{retryCount}]");
+                SpinWait.SpinUntil(() => false, RetryInterval);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 停止 EtherCAT 操作任務。
+        /// </summary>
+        /// <param name="resultCode"></param>
+        /// <returns></returns>
+        public bool StopOpTask(ref int resultCode)
+        {
+            int retryCount = 0;
+            while (retryCount++ < RetryCount)
+            {
+                resultCode = EtherCatLib.ECAT_StopDeviceOpTask(DeviceNo);
+                if (resultCode == 0)
+                {
+                    break;
+                }
+                Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"嘗試次數=[{retryCount}]");
                 SpinWait.SpinUntil(() => false, RetryInterval);
             }
             return false;
