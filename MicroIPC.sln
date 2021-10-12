@@ -5,14 +5,14 @@ VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotionDemo", "MotionDemo\MotionDemo.csproj", "{A625A93D-12C2-4DE6-A677-A21332554D81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtherCATMaster", "Motion\EtherCATMaster.csproj", "{7141E7DF-820B-47A8-AA6F-326F94548A71}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{37B60C0E-0B2E-4178-8FA9-F811D0F2C3DE}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotionDemoWPF", "MotionDemoWPF\MotionDemoWPF.csproj", "{F0E586D7-D13E-45B1-A5A5-95BDBC69C54D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtherCATMaster", "EtherCATMaster\EtherCATMaster.csproj", "{7141E7DF-820B-47A8-AA6F-326F94548A71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,14 +24,14 @@ Global
 		{A625A93D-12C2-4DE6-A677-A21332554D81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A625A93D-12C2-4DE6-A677-A21332554D81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A625A93D-12C2-4DE6-A677-A21332554D81}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7141E7DF-820B-47A8-AA6F-326F94548A71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7141E7DF-820B-47A8-AA6F-326F94548A71}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7141E7DF-820B-47A8-AA6F-326F94548A71}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7141E7DF-820B-47A8-AA6F-326F94548A71}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F0E586D7-D13E-45B1-A5A5-95BDBC69C54D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F0E586D7-D13E-45B1-A5A5-95BDBC69C54D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0E586D7-D13E-45B1-A5A5-95BDBC69C54D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0E586D7-D13E-45B1-A5A5-95BDBC69C54D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7141E7DF-820B-47A8-AA6F-326F94548A71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7141E7DF-820B-47A8-AA6F-326F94548A71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7141E7DF-820B-47A8-AA6F-326F94548A71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7141E7DF-820B-47A8-AA6F-326F94548A71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

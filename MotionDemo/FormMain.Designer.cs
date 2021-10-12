@@ -69,11 +69,18 @@ namespace MotionDemo
             this.ServoOff = new Sunny.UI.UIButton();
             this.ServoOnButton = new Sunny.UI.UIButton();
             this.Timer1 = new System.Windows.Forms.Timer(this.components);
+            this.uiTabControl1 = new Sunny.UI.UITabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.uiTitlePanel5 = new Sunny.UI.UITitlePanel();
             this.uiTableLayoutPanel1.SuspendLayout();
             this.uiTitlePanel1.SuspendLayout();
             this.uiTitlePanel2.SuspendLayout();
             this.uiTitlePanel3.SuspendLayout();
             this.uiTitlePanel4.SuspendLayout();
+            this.uiTabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // AxisPositionTextBox
@@ -93,6 +100,7 @@ namespace MotionDemo
             this.AxisPositionTextBox.MinimumSize = new System.Drawing.Size(1, 1);
             this.AxisPositionTextBox.Name = "AxisPositionTextBox";
             this.AxisPositionTextBox.Size = new System.Drawing.Size(201, 40);
+            this.AxisPositionTextBox.Style = Sunny.UI.UIStyle.Custom;
             this.AxisPositionTextBox.TabIndex = 0;
             this.AxisPositionTextBox.Text = "0";
             this.AxisPositionTextBox.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
@@ -149,6 +157,7 @@ namespace MotionDemo
             this.uiLabel5.Location = new System.Drawing.Point(9, 171);
             this.uiLabel5.Name = "uiLabel5";
             this.uiLabel5.Size = new System.Drawing.Size(90, 40);
+            this.uiLabel5.Style = Sunny.UI.UIStyle.Custom;
             this.uiLabel5.TabIndex = 5;
             this.uiLabel5.Text = "目標位置：";
             this.uiLabel5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -256,9 +265,10 @@ namespace MotionDemo
             // 
             // uiTitlePanel1
             // 
+            this.uiTitlePanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.uiTitlePanel1.Controls.Add(this.uiTableLayoutPanel1);
             this.uiTitlePanel1.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.uiTitlePanel1.Location = new System.Drawing.Point(0, 363);
+            this.uiTitlePanel1.Location = new System.Drawing.Point(677, 0);
             this.uiTitlePanel1.Margin = new System.Windows.Forms.Padding(0);
             this.uiTitlePanel1.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiTitlePanel1.Name = "uiTitlePanel1";
@@ -281,7 +291,7 @@ namespace MotionDemo
             this.SlaveStateListView.Location = new System.Drawing.Point(0, 50);
             this.SlaveStateListView.MultiSelect = false;
             this.SlaveStateListView.Name = "SlaveStateListView";
-            this.SlaveStateListView.Size = new System.Drawing.Size(934, 130);
+            this.SlaveStateListView.Size = new System.Drawing.Size(672, 130);
             this.SlaveStateListView.TabIndex = 12;
             this.SlaveStateListView.UseCompatibleStateImageBehavior = false;
             this.SlaveStateListView.View = System.Windows.Forms.View.Details;
@@ -315,15 +325,16 @@ namespace MotionDemo
             // 
             // uiTitlePanel2
             // 
+            this.uiTitlePanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.uiTitlePanel2.Controls.Add(this.SlaveStateListView);
-            this.uiTitlePanel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.uiTitlePanel2.Font = new System.Drawing.Font("微软雅黑", 12F);
             this.uiTitlePanel2.Location = new System.Drawing.Point(0, 0);
             this.uiTitlePanel2.Margin = new System.Windows.Forms.Padding(5, 7, 5, 7);
             this.uiTitlePanel2.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiTitlePanel2.Name = "uiTitlePanel2";
             this.uiTitlePanel2.Padding = new System.Windows.Forms.Padding(0, 50, 0, 0);
-            this.uiTitlePanel2.Size = new System.Drawing.Size(934, 180);
+            this.uiTitlePanel2.Size = new System.Drawing.Size(672, 180);
             this.uiTitlePanel2.TabIndex = 13;
             this.uiTitlePanel2.Text = "SlaveState";
             this.uiTitlePanel2.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
@@ -333,15 +344,18 @@ namespace MotionDemo
             this.uiTitlePanel3.Controls.Add(this.AxisListView);
             this.uiTitlePanel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.uiTitlePanel3.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.uiTitlePanel3.Location = new System.Drawing.Point(0, 180);
+            this.uiTitlePanel3.Location = new System.Drawing.Point(0, 0);
             this.uiTitlePanel3.Margin = new System.Windows.Forms.Padding(5, 7, 5, 7);
             this.uiTitlePanel3.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiTitlePanel3.Name = "uiTitlePanel3";
             this.uiTitlePanel3.Padding = new System.Windows.Forms.Padding(0, 50, 0, 0);
-            this.uiTitlePanel3.Size = new System.Drawing.Size(934, 180);
+            this.uiTitlePanel3.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.uiTitlePanel3.Size = new System.Drawing.Size(944, 180);
+            this.uiTitlePanel3.Style = Sunny.UI.UIStyle.Custom;
             this.uiTitlePanel3.TabIndex = 14;
             this.uiTitlePanel3.Text = "AxisState";
             this.uiTitlePanel3.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            this.uiTitlePanel3.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             // 
             // AxisListView
             // 
@@ -358,7 +372,7 @@ namespace MotionDemo
             this.AxisListView.Location = new System.Drawing.Point(0, 50);
             this.AxisListView.MultiSelect = false;
             this.AxisListView.Name = "AxisListView";
-            this.AxisListView.Size = new System.Drawing.Size(934, 130);
+            this.AxisListView.Size = new System.Drawing.Size(944, 130);
             this.AxisListView.TabIndex = 15;
             this.AxisListView.UseCompatibleStateImageBehavior = false;
             this.AxisListView.View = System.Windows.Forms.View.Details;
@@ -417,15 +431,18 @@ namespace MotionDemo
             this.uiTitlePanel4.Controls.Add(this.ServoOff);
             this.uiTitlePanel4.Controls.Add(this.ServoOnButton);
             this.uiTitlePanel4.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.uiTitlePanel4.Location = new System.Drawing.Point(268, 363);
+            this.uiTitlePanel4.Location = new System.Drawing.Point(5, 185);
             this.uiTitlePanel4.Margin = new System.Windows.Forms.Padding(5, 7, 5, 7);
             this.uiTitlePanel4.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiTitlePanel4.Name = "uiTitlePanel4";
             this.uiTitlePanel4.Padding = new System.Windows.Forms.Padding(0, 50, 0, 0);
-            this.uiTitlePanel4.Size = new System.Drawing.Size(666, 353);
+            this.uiTitlePanel4.RectColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.uiTitlePanel4.Size = new System.Drawing.Size(430, 349);
+            this.uiTitlePanel4.Style = Sunny.UI.UIStyle.Custom;
             this.uiTitlePanel4.TabIndex = 16;
             this.uiTitlePanel4.Text = "ControlPanel";
             this.uiTitlePanel4.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            this.uiTitlePanel4.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             // 
             // AxisVelTextBox
             // 
@@ -448,6 +465,7 @@ namespace MotionDemo
             this.AxisVelTextBox.Name = "AxisVelTextBox";
             this.AxisVelTextBox.ReadOnly = true;
             this.AxisVelTextBox.Size = new System.Drawing.Size(201, 40);
+            this.AxisVelTextBox.Style = Sunny.UI.UIStyle.Custom;
             this.AxisVelTextBox.TabIndex = 3;
             this.AxisVelTextBox.Text = "150000";
             this.AxisVelTextBox.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
@@ -460,6 +478,7 @@ namespace MotionDemo
             this.uiLabel6.Location = new System.Drawing.Point(9, 126);
             this.uiLabel6.Name = "uiLabel6";
             this.uiLabel6.Size = new System.Drawing.Size(68, 40);
+            this.uiLabel6.Style = Sunny.UI.UIStyle.Custom;
             this.uiLabel6.TabIndex = 25;
             this.uiLabel6.Text = "速度：";
             this.uiLabel6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -599,13 +618,65 @@ namespace MotionDemo
             this.ServoOnButton.Text = "Servo On";
             this.ServoOnButton.Click += new System.EventHandler(this.ServoOnButton_Click);
             // 
+            // uiTabControl1
+            // 
+            this.uiTabControl1.Controls.Add(this.tabPage1);
+            this.uiTabControl1.Controls.Add(this.tabPage2);
+            this.uiTabControl1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.uiTabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            this.uiTabControl1.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.uiTabControl1.ItemSize = new System.Drawing.Size(150, 40);
+            this.uiTabControl1.Location = new System.Drawing.Point(0, 219);
+            this.uiTabControl1.MainPage = "";
+            this.uiTabControl1.Name = "uiTabControl1";
+            this.uiTabControl1.SelectedIndex = 0;
+            this.uiTabControl1.Size = new System.Drawing.Size(944, 574);
+            this.uiTabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            this.uiTabControl1.Style = Sunny.UI.UIStyle.Custom;
+            this.uiTabControl1.TabIndex = 26;
+            this.uiTabControl1.TabSelectedForeColor = System.Drawing.Color.Red;
+            this.uiTabControl1.TabSelectedHighColor = System.Drawing.Color.Red;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.uiTitlePanel3);
+            this.tabPage1.Controls.Add(this.uiTitlePanel4);
+            this.tabPage1.Location = new System.Drawing.Point(0, 40);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Size = new System.Drawing.Size(944, 534);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "軸控";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.uiTitlePanel5);
+            this.tabPage2.Location = new System.Drawing.Point(0, 40);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Size = new System.Drawing.Size(944, 534);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "IO";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // uiTitlePanel5
+            // 
+            this.uiTitlePanel5.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.uiTitlePanel5.Location = new System.Drawing.Point(0, 0);
+            this.uiTitlePanel5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiTitlePanel5.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiTitlePanel5.Name = "uiTitlePanel5";
+            this.uiTitlePanel5.Padding = new System.Windows.Forms.Padding(0, 35, 0, 0);
+            this.uiTitlePanel5.Size = new System.Drawing.Size(567, 259);
+            this.uiTitlePanel5.TabIndex = 0;
+            this.uiTitlePanel5.Text = "IO控制";
+            this.uiTitlePanel5.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(934, 717);
-            this.Controls.Add(this.uiTitlePanel4);
-            this.Controls.Add(this.uiTitlePanel3);
+            this.ClientSize = new System.Drawing.Size(944, 793);
+            this.Controls.Add(this.uiTabControl1);
             this.Controls.Add(this.uiTitlePanel2);
             this.Controls.Add(this.uiTitlePanel1);
             this.Font = new System.Drawing.Font("Microsoft JhengHei UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
@@ -622,6 +693,9 @@ namespace MotionDemo
             this.uiTitlePanel2.ResumeLayout(false);
             this.uiTitlePanel3.ResumeLayout(false);
             this.uiTitlePanel4.ResumeLayout(false);
+            this.uiTabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -667,6 +741,10 @@ namespace MotionDemo
         private Sunny.UI.UIButton ErrorRestButton;
         private Sunny.UI.UILabel uiLabel6;
         private Sunny.UI.UITextBox AxisVelTextBox;
+        private Sunny.UI.UITabControl uiTabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private Sunny.UI.UITitlePanel uiTitlePanel5;
     }
 }
 

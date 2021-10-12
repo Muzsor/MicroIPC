@@ -21,7 +21,7 @@
         /// 指定軸數量與軸號。
         /// </summary>
         /// <param name="count"></param>
-        public bool SetAxisNo(ushort[] axisList, ref int resultCode)
+        public bool SetAxisNo(ushort[] axisList)
         {
             if (AxisItems == null)
             {
@@ -33,6 +33,18 @@
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// 停止、關閉所有子軸。
+        /// </summary>
+        public void CloseAllAxis()
+        {
+            for (int i = 0; i < AxisItems.Length; i++)
+            {
+                AxisItems[i].AxisQuickStop();
+                AxisItems[i].ServoControl(false);
+            }
         }
     }
 }

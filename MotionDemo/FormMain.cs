@@ -12,8 +12,6 @@ namespace MotionDemo
 {
     public partial class FormMain : Form
     {
-        private readonly ushort DeviceCount;
-
         private readonly ECatDevice MainDevice;
 
         public FormMain()
@@ -21,28 +19,32 @@ namespace MotionDemo
             InitializeComponent();
             int resultCode = 0;
             //Text += $" DllVersion:{MotionController.GetVersion(ref resultCode)}";
-            DeviceCount = ECatControl.GetDeviceCount(new byte[16], ref resultCode);
-            if (DeviceCount > 0)
+            if (ECatControl.GetDeviceCount(new byte[16], ref resultCode) > 0)
             {
                 MainDevice = new ECatDevice(0); // CardId
-                MainDevice.DeviceStateChangeEvent += MainMotionController_DeviceStateChangeEvent;
+                MainDevice.DeviceStateChangeEvent += MainDevice_DeviceStateChangeEvent;
                 InitializeDevice();
             }
         }
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (MainDevice.SlaveItems != null && MainDevice.SlaveItems[0] is MotionSlave eCatSlave)
+            if (MainDevice.SlaveItems != null)
             {
-                eCatSlave.AxisItems[0].AxisQuickStop();
-                eCatSlave.AxisItems[0].ServoControl(false);
+                for (int i = 0; i < MainDevice.SlaveItems.Length; i++)
+                {
+                    if (MainDevice.SlaveItems[i] is MotionSlave motionSlave)
+                    {
+                        motionSlave.CloseAllAxis();
+                    }
+                }
             }
             int resultCode = 0;
             MainDevice.StopOpTask(ref resultCode);
             MainDevice.CloseDevice(ref resultCode);
         }
 
-        private void MainMotionController_DeviceStateChangeEvent(object sender, DeviceStateChangeEventArgs e)
+        private void MainDevice_DeviceStateChangeEvent(object sender, DeviceStateChangeEventArgs e)
         {
             LinkUpTextBox.Text = e.IsLinkUp ? "Connect" : "DisConnect";
             SlavesRespTextBox.Text = e.SlavesResp.ToString();
@@ -65,7 +67,7 @@ namespace MotionDemo
                 if (MainDevice.SlaveItems[0] is MotionSlave slave && slave.SlaveName == Settings.Default.Card1Slave1Name)
                 {
                     ushort[] axisList = Settings.Default.Card1Slave1AxisList.Split(',').Select(s => (ushort)int.Parse(s)).ToArray();
-                    if (slave.SetAxisNo(axisList, ref resultCode))
+                    if (slave.SetAxisNo(axisList))
                     {
                         var listItem = new ListViewItem(slave.SlaveNo.ToString());  // 0
                         listItem.SubItems.Add(slave.Alias.ToString()); // 1
