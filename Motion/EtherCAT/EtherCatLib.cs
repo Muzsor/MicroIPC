@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Motion
+namespace EtherCATMaster
 {
     internal class EtherCatLib
     {
@@ -160,21 +160,101 @@ namespace Motion
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_GetSlaveTxPdoChannel")]
         public static extern int ECAT_GetSlaveTxPdoChannel(ushort DeviceNo, ushort SlaveNo, ref byte channel, ref byte bitsize);
 
+        /// <summary>
+        /// 取得從站模組 DI 資料。
+        /// </summary>
+        /// <param name="DeviceNo">裝置編號。</param>
+        /// <param name="SlaveNo">從站編號。</param>
+        /// <param name="Value">輸入埠資料。</param>
+        /// <returns></returns>
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_GetSlaveDI")]
         public static extern int ECAT_GetSlaveDI(ushort DeviceNo, ushort SlaveNo, ref uint Value);
 
+        /// <summary>
+        /// 取得從站模組 DI 指定位元資料。
+        /// </summary>
+        /// <param name="DeviceNo">裝置編號。</param>
+        /// <param name="SlaveNo">從站編號。</param>
+        /// <param name="BitNo">指定位元。</param>
+        /// <param name="Value">輸入埠資料。</param>
+        /// <returns></returns>
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_GetSlaveDIBit")]
         public static extern int ECAT_GetSlaveDIBit(ushort DeviceNo, ushort SlaveNo, ushort BitNo, ref uint Value);
 
+        /// <summary>
+        /// 取得從站模組 DO 資料。
+        /// </summary>
+        /// <param name="DeviceNo">裝置編號。</param>
+        /// <param name="SlaveNo">從站編號。</param>
+        /// <param name="Value">輸出埠資料。</param>
+        /// <returns></returns>
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_GetSlaveDO")]
         public static extern int ECAT_GetSlaveDO(ushort DeviceNo, ushort SlaveNo, ref uint Value);
 
+        /// <summary>
+        /// 取得從站模組 DO 資料。此函式可以同時讀取多個模組的資料。
+        /// </summary>
+        /// <param name="DeviceNo">裝置編號。</param>
+        /// <param name="SlaveNo">從站編號。</param>
+        /// <param name="Value">輸出埠資料。</param>
+        /// <param name="SlaveCnt">模組數量。</param>
+        /// <returns></returns>
+        [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_GetMultiSlaveDO")]
+        public static extern int ECAT_GetMultiSlaveDO(ushort DeviceNo, ushort[] SlaveNo, ref uint[] Value, ushort SlaveCnt);
+
+        /// <summary>
+        /// 取得從站模組 DO 指定位元資料。
+        /// </summary>
+        /// <param name="DeviceNo">裝置編號。</param>
+        /// <param name="SlaveNo">從站編號。</param>
+        /// <param name="BitNo">指定位元。</param>
+        /// <param name="Value">輸出埠資料。</param>
+        /// <returns></returns>
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_GetSlaveDOBit")]
         public static extern int ECAT_GetSlaveDOBit(ushort DeviceNo, ushort SlaveNo, ushort BitNo, ref uint Value);
 
+        /// <summary>
+        /// 設定從站模組 DO 資料。
+        /// </summary>
+        /// <param name="DeviceNo">裝置編號。</param>
+        /// <param name="SlaveNo">從站編號。</param>
+        /// <param name="Value">輸出埠資料。</param>
+        /// <returns></returns>
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_SetSlaveDO")]
         public static extern int ECAT_SetSlaveDO(ushort DeviceNo, ushort SlaveNo, uint Value);
 
+        /// <summary>
+        /// 設定從站模組 DO 資料。類似 ECAT_SetSlaveDO ，此函式可以同時對多個模組下達指令。
+        /// </summary>
+        /// <param name="DeviceNo">裝置編號。</param>
+        /// <param name="SlaveNo">從站編號。</param>
+        /// <param name="Value">輸出埠資料。</param>
+        /// <param name="SlaveCnt">要設定的模組數量。</param>
+        /// <returns></returns>
+        [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_SetMultiSlaveDO")]
+        public static extern int ECAT_SetMultiSlaveDO(ushort DeviceNo, ushort[] SlaveNo, uint[] Value, ushort SlaveCnt);
+
+        /// <summary>
+        /// 設定從站模組DO資料。類似ECAT_SetSlaveDO，此函式可以同時對多個模組下達指令。
+        /// </summary>
+        /// <param name="DeviceNo">裝置編號。</param>
+        /// <param name="SlaveNo">從站編號。</param>
+        /// <param name="Value">輸出埠資料。</param>
+        /// <param name="Width">時間，EtherCAT 通訊週期的倍數。</param>
+        /// <param name="Mask">遮罩，僅在有遮罩設定的 BIT 會被關閉。</param>
+        /// <param name="SlaveCnt">要設定的模組數量。</param>
+        /// <returns></returns>
+        [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_SetMultiSlaveDO_AutoOff")]
+        public static extern int ECAT_SetMultiSlaveDO_AutoOff(ushort DeviceNo, ushort[] SlaveNo, uint[] Value, uint[] Width, uint[] Mask, ushort SlaveCnt);
+
+        /// <summary>
+        /// 設定從站模組 DO 指定位元資料。
+        /// </summary>
+        /// <param name="DeviceNo">裝置編號。</param>
+        /// <param name="SlaveNo">從站編號。</param>
+        /// <param name="BitNo">指定位元。</param>
+        /// <param name="Value">輸出埠資料。</param>
+        /// <returns></returns>
         [DllImport("libecatdevice.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ECAT_SetSlaveDOBit")]
         public static extern int ECAT_SetSlaveDOBit(ushort DeviceNo, ushort SlaveNo, ushort BitNo, uint Value);
 

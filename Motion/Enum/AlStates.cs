@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Motion
+namespace EtherCATMaster
 {
     [Flags]
     public enum AlStates

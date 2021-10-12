@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Motion
+namespace EtherCATMaster
 {
     public static class Logger
     {

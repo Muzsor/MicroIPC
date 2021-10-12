@@ -7,8 +7,8 @@
     <ProjectGuid>{7141E7DF-820B-47A8-AA6F-326F94548A71}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Motion</RootNamespace>
-    <AssemblyName>Motion</AssemblyName>
+    <RootNamespace>EtherCATMaster</RootNamespace>
+    <AssemblyName>EtherCATMaster</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -49,6 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\AbstractECatSlave.cs" />
+    <Compile Include="Abstract\ECatControl.cs" />
     <Compile Include="Enum\AccDecType.cs" />
     <Compile Include="Enum\AlStates.cs" />
     <Compile Include="Enum\AxisStates.cs" />
@@ -57,10 +59,12 @@
     <Compile Include="EtherCAT\EtherCatDef.cs" />
     <Compile Include="EtherCAT\EtherCatError.cs" />
     <Compile Include="EtherCAT\EtherCatLib.cs" />
-    <Compile Include="MotionAxis.cs" />
-    <Compile Include="MotionController.cs" />
-    <Compile Include="MotionParam.cs" />
-    <Compile Include="MotionSlave.cs" />
+    <Compile Include="IO\IOSlave.cs" />
+    <Compile Include="Motion\MotionAxis.cs" />
+    <Compile Include="Abstract\AbstractECatDevice.cs" />
+    <Compile Include="ECatDevice.cs" />
+    <Compile Include="Motion\MotionParam.cs" />
+    <Compile Include="Motion\MotionSlave.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Event\SalveAxisStateChangeEventArgs.cs" />
     <Compile Include="Utils\Logger.cs" />

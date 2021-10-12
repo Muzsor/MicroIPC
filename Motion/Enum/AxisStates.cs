@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Motion
+namespace EtherCATMaster
 {
     /// <summary>
     /// 軸狀態編號。

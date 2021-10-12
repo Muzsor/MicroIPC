@@ -1,5 +1,5 @@
 ﻿
-namespace Motion
+namespace MotionDemo
 {
     partial class FormMain
     {

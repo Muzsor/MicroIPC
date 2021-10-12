@@ -1,4 +1,4 @@
-﻿namespace Motion
+﻿namespace EtherCATMaster
 {
     internal static class EtherCatError
     {

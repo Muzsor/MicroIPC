@@ -1,4 +1,4 @@
-﻿namespace Motion
+﻿namespace EtherCATMaster
 {
     public class DeviceStateChangeEventArgs
     {

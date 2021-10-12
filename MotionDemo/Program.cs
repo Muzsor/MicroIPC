@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Motion
+namespace MotionDemo
 {
     internal static class Program
     {

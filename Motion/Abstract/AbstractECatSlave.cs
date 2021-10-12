@@ -1,12 +1,14 @@
-﻿using Motion.Enum;
+﻿using EtherCATMaster.Enum;
 
 using System.Text;
 using System.Threading;
 
-namespace Motion
+namespace EtherCATMaster
 {
-    public class MotionSlave
+    public abstract class AbstractECatSlave
     {
+        #region Property
+
         /// <summary>
         /// 裝置編號(卡號)。
         /// </summary>
@@ -70,18 +72,11 @@ namespace Motion
         /// </summary>
         public string SlaveName { get; private set; }
 
-        private MotionAxis[] axisItems;
-        /// <summary>
-        /// Axis 模塊在 EtherCAT 網絡中的位置，最多 64 軸。
-        /// </summary>
-        public MotionAxis[] AxisItems
-        {
-            get => axisItems;
-            private set => axisItems = value.Length > EtherCatDef.MC_AXIS_NO_MAX ?
-                new MotionAxis[EtherCatDef.MC_AXIS_NO_MAX] : value;
-        }
+        #endregion
 
-        public MotionSlave(ushort deviceNo, ushort slaveNo)
+        #region Public Method
+
+        public AbstractECatSlave(ushort deviceNo, ushort slaveNo)
         {
             DeviceNo = deviceNo;
             SlaveNo = slaveNo;
@@ -107,7 +102,7 @@ namespace Motion
             var slvName = new StringBuilder(string.Empty, EtherCatDef.MAX_SLAVE_NAME_LENGTH);
             int resultCode = 0;
             int retryCount = 0;
-            while (retryCount++ < MotionController.RetryCount)
+            while (retryCount++ < ECatControl.RetryCount)
             {
                 resultCode = EtherCatLib.ECAT_GetSlaveInfo(
                     DeviceNo,
@@ -125,7 +120,7 @@ namespace Motion
                     break;
                 }
                 Logger.Error(resultCode, "ECAT_GetSlaveInfo", $"嘗試次數=[{retryCount}]");
-                SpinWait.SpinUntil(() => false, MotionController.RetryInterval);
+                SpinWait.SpinUntil(() => false, ECatControl.RetryInterval);
             }
             if (resultCode == 0)
             {
@@ -137,22 +132,6 @@ namespace Motion
             return false;
         }
 
-        /// <summary>
-        /// 指定軸數量與軸號。
-        /// </summary>
-        /// <param name="count"></param>
-        public bool SetAxisNo(ushort[] axisList, ref int resultCode)
-        {
-            if (AxisItems == null)
-            {
-                AxisItems = new MotionAxis[axisList.Length];
-                for (ushort i = 0; i < AxisItems.Length; i++)
-                {
-                    AxisItems[i] = new MotionAxis(DeviceNo, SlaveNo, axisList[i]);
-                }
-                return true;
-            }
-            return false;
-        }
+        #endregion
     }
 }

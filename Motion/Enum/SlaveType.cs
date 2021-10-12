@@ -1,4 +1,4 @@
-﻿namespace Motion.Enum
+﻿namespace EtherCATMaster.Enum
 {
     public enum SlaveType
     {
