@@ -40,14 +40,5 @@ namespace MotionDemo.Properties {
                 return ((string)(this["Card1Slave1AxisList"]));
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Card1Slave2Name {
-            get {
-                return ((string)(this["Card1Slave2Name"]));
-            }
-        }
     }
 }

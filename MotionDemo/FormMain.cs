@@ -63,19 +63,27 @@ namespace MotionDemo
             // 初始化從站
             if (MainDevice.InitializeSlave(slaveList))
             {
-                // Card 1
-                if (MainDevice.SlaveItems[0] is MotionSlave slave && slave.SlaveName == Settings.Default.Card1Slave1Name)
+                // slave 1
+                if (MainDevice.SlaveItems[0] is MotionSlave slave1 && slave1.SlaveName == Settings.Default.Card1Slave1Name)
                 {
                     ushort[] axisList = Settings.Default.Card1Slave1AxisList.Split(',').Select(s => (ushort)int.Parse(s)).ToArray();
-                    if (slave.SetAxisNo(axisList))
-                    {
-                        var listItem = new ListViewItem(slave.SlaveNo.ToString());  // 0
-                        listItem.SubItems.Add(slave.Alias.ToString()); // 1
-                        listItem.SubItems.Add(slave.SlaveName.ToString()); // 2
-                        listItem.SubItems.Add(slave.SlaveType.ToString()); // 3
-                        listItem.SubItems.Add(slave.AlState.ToString()); // 4
-                        SlaveStateListView.Items.Add(listItem);
-                    }
+                    var listItem = new ListViewItem(slave1.SlaveNo.ToString());  // 0
+                    listItem.SubItems.Add(slave1.Alias.ToString()); // 1
+                    listItem.SubItems.Add(slave1.SlaveName.ToString()); // 2
+                    listItem.SubItems.Add(slave1.SlaveType.ToString()); // 3
+                    listItem.SubItems.Add(slave1.AlState.ToString()); // 4
+                    SlaveStateListView.Items.Add(listItem);
+                    slave1.SetAxisNo(axisList);
+                }
+                // slave 2
+                if (MainDevice.SlaveItems[1] is IOSlave slave2)
+                {
+                    var listItem = new ListViewItem(slave2.SlaveNo.ToString());  // 0
+                    listItem.SubItems.Add(slave2.Alias.ToString()); // 1
+                    listItem.SubItems.Add(slave2.SlaveName.ToString()); // 2
+                    listItem.SubItems.Add(slave2.SlaveType.ToString()); // 3
+                    listItem.SubItems.Add(slave2.AlState.ToString()); // 4
+                    SlaveStateListView.Items.Add(listItem);
                 }
 
                 if (MainDevice.InitMotionAxis())
@@ -114,13 +122,13 @@ namespace MotionDemo
             MainDevice.GetDeviceState(ref resultCode);
             for (int i = 0; i < MainDevice.SlaveItems.Length; i++)
             {
-                if (MainDevice.SlaveItems[i] is MotionSlave ecatSlave)
+                if (MainDevice.SlaveItems[i] is MotionSlave slave1)
                 {
-                    if (ecatSlave.GetSlaveInfo() && SlaveStateListView.Items[0] != null)
+                    if (slave1.GetSlaveInfo() && SlaveStateListView.Items[0] != null)
                     {
-                        SlaveStateListView.Items[0].SubItems[4].Text = ecatSlave.AlState.ToString();
+                        SlaveStateListView.Items[0].SubItems[4].Text = slave1.AlState.ToString();
                     }
-                    MotionAxis axis = ecatSlave.AxisItems[0];
+                    MotionAxis axis = slave1.AxisItems[0];
                     if (axis.GetAxisProcessState() && AxisListView.Items[0] != null)
                     {
                         AxisListView.Items[0].SubItems[1].Text = axis.AxisState.GetDescriptionText();
@@ -129,6 +137,52 @@ namespace MotionDemo
                         AxisListView.Items[0].SubItems[4].Text = axis.CommandPos.ToString();
                         AxisListView.Items[0].SubItems[5].Text = axis.ActualPos.ToString();
                         AxisListView.Items[0].SubItems[6].Text = axis.ActualVel.ToString();
+                    }
+                }
+                else if (MainDevice.SlaveItems[i] is IOSlave slave2)
+                {
+                    if (slave2.GetSlaveInfo() && SlaveStateListView.Items[1] != null)
+                    {
+                        SlaveStateListView.Items[0].SubItems[4].Text = slave2.AlState.ToString();
+                    }
+                    uint uint32 = 0;
+                    if (slave2.GetDI(ref uint32))
+                    {
+                        DI0.Checked = (uint32 & 1) == 1;
+                        DI1.Checked = (uint32 & 2) == 2;
+                        DI2.Checked = (uint32 & 4) == 4;
+                        DI3.Checked = (uint32 & 8) == 8;
+                        DI4.Checked = (uint32 & 16) == 16;
+                        DI5.Checked = (uint32 & 32) == 32;
+                        DI6.Checked = (uint32 & 64) == 64;
+                        DI7.Checked = (uint32 & 128) == 128;
+                        DI8.Checked = (uint32 & 256) == 256;
+                        DI9.Checked = (uint32 & 512) == 512;
+                        DI10.Checked = (uint32 & 1024) == 1024;
+                        DI11.Checked = (uint32 & 2048) == 2048;
+                        DI12.Checked = (uint32 & 4096) == 4096;
+                        DI13.Checked = (uint32 & 8192) == 8192;
+                        DI14.Checked = (uint32 & 16384) == 16384;
+                        DI15.Checked = (uint32 & 32768) == 32768;
+                    }
+                    if (slave2.GetDO(ref uint32))
+                    {
+                        DO0.Checked = (uint32 & 1) == 1;
+                        DO1.Checked = (uint32 & 2) == 2;
+                        DO2.Checked = (uint32 & 4) == 4;
+                        DO3.Checked = (uint32 & 8) == 8;
+                        DO4.Checked = (uint32 & 16) == 16;
+                        DO5.Checked = (uint32 & 32) == 32;
+                        DO6.Checked = (uint32 & 64) == 64;
+                        DO7.Checked = (uint32 & 128) == 128;
+                        DO8.Checked = (uint32 & 256) == 256;
+                        DO9.Checked = (uint32 & 512) == 512;
+                        DO10.Checked = (uint32 & 1024) == 1024;
+                        DO11.Checked = (uint32 & 2048) == 2048;
+                        DO12.Checked = (uint32 & 4096) == 4096;
+                        DO13.Checked = (uint32 & 8192) == 8192;
+                        DO14.Checked = (uint32 & 16384) == 16384;
+                        DO15.Checked = (uint32 & 32768) == 32768;
                     }
                 }
             }
@@ -181,6 +235,80 @@ namespace MotionDemo
                 button.Enabled = false;
                 ((MotionSlave)MainDevice.SlaveItems[0]).AxisItems[0].AxisQuickStop();
                 button.Enabled = true;
+            }
+        }
+
+        private void DOSetButton_Click(object sender, EventArgs e)
+        {
+            uint uint32 = 0;
+
+            if (MainDevice.SlaveItems[1] != null && MainDevice.SlaveItems[1] is IOSlave slave2)
+            {
+                if (DO0S.Checked)
+                {
+                    uint32 |= 1 << 0;
+                }
+                if (DO1S.Checked)
+                {
+                    uint32 |= 1 << 1;
+                }
+                if (DO2S.Checked)
+                {
+                    uint32 |= 1 << 2;
+                }
+                if (DO3S.Checked)
+                {
+                    uint32 |= 1 << 3;
+                }
+                if (DO4S.Checked)
+                {
+                    uint32 |= 1 << 4;
+                }
+                if (DO5S.Checked)
+                {
+                    uint32 |= 1 << 5;
+                }
+                if (DO6S.Checked)
+                {
+                    uint32 |= 1 << 6;
+                }
+                if (DO7S.Checked)
+                {
+                    uint32 |= 1 << 7;
+                }
+                if (DO8S.Checked)
+                {
+                    uint32 |= 1 << 8;
+                }
+                if (DO9S.Checked)
+                {
+                    uint32 |= 1 << 9;
+                }
+                if (DO10S.Checked)
+                {
+                    uint32 |= 1 << 10;
+                }
+                if (DO11S.Checked)
+                {
+                    uint32 |= 1 << 11;
+                }
+                if (DO12S.Checked)
+                {
+                    uint32 |= 1 << 12;
+                }
+                if (DO13S.Checked)
+                {
+                    uint32 |= 1 << 13;
+                }
+                if (DO14S.Checked)
+                {
+                    uint32 |= 1 << 14;
+                }
+                if (DO15S.Checked)
+                {
+                    uint32 |= 1 << 15;
+                }
+                slave2.SetDO(uint32);
             }
         }
     }
