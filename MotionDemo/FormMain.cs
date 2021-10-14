@@ -18,13 +18,13 @@ namespace MotionDemo
         {
             InitializeComponent();
             int resultCode = 0;
-            //Text += $" DllVersion:{MotionController.GetVersion(ref resultCode)}";
             if (ECatControl.GetDeviceCount(new byte[16], ref resultCode) > 0)
             {
                 MainDevice = new ECatDevice(0); // CardId
                 MainDevice.DeviceStateChangeEvent += MainDevice_DeviceStateChangeEvent;
                 InitializeDevice();
             }
+            //Text += $" DllVersion:{ECatControl.GetVersion(ref resultCode)}";
         }
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)

@@ -181,7 +181,10 @@ namespace EtherCATMaster
                 resultCode = AlState == AlStates.ECAT_AS_PREOP
                     ? EtherCatLib.ECAT_StartDeviceOpTask(DeviceNo, NetworkInfoNo, EtherCatDef.DEV_OP_CYCLE_TIME_1MS, ECatControl.RetryCount)
                     : EtherCatLib.ECAT_StopDeviceOpTask(DeviceNo);
-                Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"嘗試次數=[{retryCount}]");
+                if (resultCode != 0)
+                {
+                    Logger.Error(resultCode, MethodBase.GetCurrentMethod().Name, $"嘗試次數=[{retryCount}]");
+                }
                 SpinWait.SpinUntil(() => false, ECatControl.RetryInterval);
             }
             return false;

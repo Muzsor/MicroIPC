@@ -12,9 +12,9 @@ namespace EtherCATMaster
             => logger.Error($"Method=[{methodName}], {(errorMsg == null ? string.Empty : $", {errorMsg}")}");
 
         internal static void Error(int errorCode, string methodName, Exception excetionMsg)
-            => logger.Error($"ErrorCode=[{errorCode:####}], Method=[{methodName}] {(excetionMsg == null ? string.Empty : $", {excetionMsg}")}");
+            => logger.Error($"ErrorCode=[{errorCode,5}], Method=[{methodName}] {(excetionMsg == null ? string.Empty : $", {excetionMsg}")}");
 
         internal static void Error(int errorCode, string methodName, string errorMsg = null)
-            => logger.Error($"ErrorCode=[{errorCode:####}], Method=[{methodName}] {(errorMsg == null ? string.Empty : $", {errorMsg}")}");
+            => logger.Error($"ErrorCode=[{errorCode,5}], Method=[{methodName}] {(errorMsg == null ? string.Empty : $", {errorMsg}")}");
     }
 }

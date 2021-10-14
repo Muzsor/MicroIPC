@@ -275,44 +275,82 @@ namespace EtherCATMaster
             motionParamResult.VelScale = velScale;
             motionParamResult.AccScale = accScale;
             // 設定執行單軸運動時使用的加減速時間。
-            if (motionParam.AccTime > 0 && motionParam.DecTime > 0)
+            if (motionParam.AccTime > 0)
             {
                 retryCount = 0;
                 resultCode = 0;
                 while (retryCount++ < ECatControl.RetryCount)
                 {
-                    resultCode = EtherCatLib.ECAT_McSetAxisAccDecTime_Stepper(DeviceNo, AxisNo, motionParam.AccTime, motionParam.DecTime);
+                    resultCode = EtherCatLib.ECAT_McSetAxisAccTime(DeviceNo, AxisNo, motionParam.AccTime);
                     if (resultCode == 0)
                     {
                         break;
                     }
                     Logger.Error(
                         resultCode,
-                        "ECAT_McSetAxisAccDecTime_Stepper",
+                        "ECAT_McSetAxisAccTime",
                         $"DeviceNo=[{DeviceNo}], SlaveNo=[{SlaveNo}], AxisNo=[{AxisNo}], 嘗試次數=[{retryCount}] 設定失敗。");
                     SpinWait.SpinUntil(() => false, ECatControl.RetryInterval);
                 }
             }
             // 讀取執行單軸運動時使用的加減速時間。
             ushort accTime = 0;
-            ushort decTime = 0;
             retryCount = 0;
             resultCode = 0;
             while (retryCount++ < ECatControl.RetryCount)
             {
-                resultCode = EtherCatLib.ECAT_McGetAxisAccDecTime_Stepper(DeviceNo, AxisNo, ref accTime, ref decTime);
+                resultCode = EtherCatLib.ECAT_McGetAxisAccTime(DeviceNo, AxisNo, ref accTime);
                 if (resultCode == 0)
                 {
                     break;
                 }
                 Logger.Error(
                     resultCode,
-                    "ECAT_McGetAxisAccDecTime_Stepper",
+                    "ECAT_McGetAxisAccTime",
                     $"DeviceNo=[{DeviceNo}], SlaveNo=[{SlaveNo}], AxisNo=[{AxisNo}], 嘗試次數=[{retryCount}] 讀取失敗。");
                 SpinWait.SpinUntil(() => false, ECatControl.RetryInterval);
             }
             motionParamResult.AccTime = accTime;
-            motionParamResult.DecTime = decTime;
+            motionParamResult.DecTime = accTime;
+            //// 設定執行單軸運動時使用的加減速時間。
+            //if (motionParam.AccTime > 0 && motionParam.DecTime > 0)
+            //{
+            //    retryCount = 0;
+            //    resultCode = 0;
+            //    while (retryCount++ < ECatControl.RetryCount)
+            //    {
+            //        resultCode = EtherCatLib.ECAT_McSetAxisAccDecTime_Stepper(DeviceNo, AxisNo, motionParam.AccTime, motionParam.DecTime);
+            //        if (resultCode == 0)
+            //        {
+            //            break;
+            //        }
+            //        Logger.Error(
+            //            resultCode,
+            //            "ECAT_McSetAxisAccDecTime_Stepper",
+            //            $"DeviceNo=[{DeviceNo}], SlaveNo=[{SlaveNo}], AxisNo=[{AxisNo}], 嘗試次數=[{retryCount}] 設定失敗。");
+            //        SpinWait.SpinUntil(() => false, ECatControl.RetryInterval);
+            //    }
+            //}
+            //// 讀取執行單軸運動時使用的加減速時間。
+            //ushort accTime = 0;
+            //ushort decTime = 0;
+            //retryCount = 0;
+            //resultCode = 0;
+            //while (retryCount++ < ECatControl.RetryCount)
+            //{
+            //    resultCode = EtherCatLib.ECAT_McGetAxisAccDecTime_Stepper(DeviceNo, AxisNo, ref accTime, ref decTime);
+            //    if (resultCode == 0)
+            //    {
+            //        break;
+            //    }
+            //    Logger.Error(
+            //        resultCode,
+            //        "ECAT_McGetAxisAccDecTime_Stepper",
+            //        $"DeviceNo=[{DeviceNo}], SlaveNo=[{SlaveNo}], AxisNo=[{AxisNo}], 嘗試次數=[{retryCount}] 讀取失敗。");
+            //    SpinWait.SpinUntil(() => false, ECatControl.RetryInterval);
+            //}
+            //motionParamResult.AccTime = accTime;
+            //motionParamResult.DecTime = decTime;
             // 設定執行單軸運動時使用的加速度類型。
             retryCount = 0;
             resultCode = 0;
